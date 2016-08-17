@@ -50,9 +50,9 @@
 /* Define the STM32F10x hardware depending on the used evaluation board */
 #ifdef USE_STM3210B_EVAL
 
-#define USB_DISCONNECT GPIOC // development board + Stick V12
-#define USB_DISCONNECT_PIN GPIO_Pin_6
-#define RCC_APB2Periph_GPIO_DISCONNECT RCC_APB2Periph_GPIOC
+#define USB_DISCONNECT GPIOA
+#define USB_DISCONNECT_PIN GPIO_Pin_15 // Use GPIO_Pin_10
+#define RCC_APB2Periph_GPIO_DISCONNECT RCC_APB2Periph_GPIOA
 /*
 #ifdef USE_BOARD_STICK_V12
 #else
@@ -67,8 +67,8 @@
 */
 // smartcard power supply
 #define SMARTCARD_POWER_PORT GPIOB        // change SC_PortSource in smartcard.h too
-#define SMARTCARD_POWER_PIN_1 GPIO_Pin_13 // change SC_PinSource  in smartcard.h too
-#define SMARTCARD_POWER_PIN_2 GPIO_Pin_14 // change SC_PinSource  in smartcard.h too
+#define SMARTCARD_POWER_PIN_1 GPIO_Pin_4 // change
+#define SMARTCARD_POWER_PIN_2 GPIO_Pin_5 // change
 
 // for disabling download firmware pins, used parallel to usb
 #define FIRMWARE_DL_PERIPH RCC_APB2Periph_GPIOC
@@ -78,17 +78,18 @@
 
 // port for possible smartcard LED
 
-#ifdef USE_BOARD_STICK_V12
 #define SMARTCARD_LED_PERIPH RCC_APB2Periph_GPIOA // Stick V12
 #define SMARTCARD_LED_PIN_PORT GPIOA
-#define SMARTCARD_LED_PIN GPIO_Pin_0
-#else
-#define SMARTCARD_LED_PERIPH RCC_APB2Periph_GPIOB // development board
-#define SMARTCARD_LED_PIN_PORT GPIOB
-#define SMARTCARD_LED_PIN GPIO_Pin_15
-#endif
+#define SMARTCARD_LED_PIN GPIO_Pin_7
+
+#define OATH_LED_PERIPH RCC_APB2Periph_GPIOB
+#define OATH_LED_PIN_PORT GPIOB
+#define OATH_LED_PIN GPIO_Pin_0
 
 #endif /* USE_STM3210B_EVAL */
+#define BUTTON_PERIPH RCC_APB2Periph_GPIOA
+#define BUTTON_PIN_PORT GPIOA
+#define BUTTON_PIN GPIO_Pin_0
 
 /**** Definitions for global stickstate ****/
 
