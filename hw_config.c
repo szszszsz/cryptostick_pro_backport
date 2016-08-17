@@ -278,6 +278,8 @@ char HexToAscii(uint8_t nHex) {
 * Return         : None.
 *******************************************************************************/
 
+__IO uint32_t cardSerial = 0;
+;
 void Get_SerialNum(void) {
   uint32_t Device_Serial0, Device_Serial1, Device_Serial2;
   uint8_t *SerialString;
@@ -287,23 +289,20 @@ void Get_SerialNum(void) {
     Device_Serial2 = *(__IO uint32_t*)(0x1FFFF7F0);
   */
   // No device id
-  Device_Serial0 = 0;
+  // Device_Serial0 = 0;
+  getAID();
+  uint8_t b0 = getByteOfData(10);
+  uint8_t b1 = getByteOfData(11);
+  uint8_t b2 = getByteOfData(12);
+  uint8_t b3 = getByteOfData(13);
+  Device_Serial0 = b3 + (b2 << 8) + (b1 << 16) + (b0 << 24);
+  cardSerial = Device_Serial0;
   Device_Serial1 = 0;
   Device_Serial2 = 0;
 
-  SerialString = MASS_StringSerial; // default value
+  // SerialString = MASS_StringSerial; // default value
 
-  switch (nGlobalStickState) {
-  case STICK_STATE_RAMDISK:
-    SerialString = RAMDISK_StringSerial;
-    break;
-  case STICK_STATE_SD_DISK:
-    SerialString = MASS_StringSerial;
-    break;
-  case STICK_STATE_SMARTCARD:
-    SerialString = CCID_StringSerial;
-    break;
-  }
+  SerialString = CCID_StringSerial;
 
   if (Device_Serial0 != 0) {
     SerialString[48] = HexToAscii((uint8_t)((Device_Serial2 & 0xF0000000) >> 28));
@@ -324,14 +323,14 @@ void Get_SerialNum(void) {
     SerialString[20] = HexToAscii((uint8_t)((Device_Serial1 & 0x000000F0) >> 4));
     SerialString[18] = HexToAscii((uint8_t)((Device_Serial1 & 0x0000000F) >> 0));
 
-    SerialString[16] = HexToAscii((uint8_t)((Device_Serial0 & 0xF0000000) >> 28));
-    SerialString[14] = HexToAscii((uint8_t)((Device_Serial0 & 0x0F000000) >> 24));
-    SerialString[12] = HexToAscii((uint8_t)((Device_Serial0 & 0x00F00000) >> 20));
-    SerialString[10] = HexToAscii((uint8_t)((Device_Serial0 & 0x000F0000) >> 16));
-    SerialString[8] = HexToAscii((uint8_t)((Device_Serial0 & 0x0000F000) >> 12));
-    SerialString[6] = HexToAscii((uint8_t)((Device_Serial0 & 0x00000F00) >> 8));
-    SerialString[4] = HexToAscii((uint8_t)((Device_Serial0 & 0x000000F0) >> 4));
-    SerialString[2] = HexToAscii((uint8_t)((Device_Serial0 & 0x0000000F) >> 0));
+    SerialString[2] = HexToAscii((uint8_t)((Device_Serial0 & 0xF0000000) >> 28));
+    SerialString[4] = HexToAscii((uint8_t)((Device_Serial0 & 0x0F000000) >> 24));
+    SerialString[6] = HexToAscii((uint8_t)((Device_Serial0 & 0x00F00000) >> 20));
+    SerialString[8] = HexToAscii((uint8_t)((Device_Serial0 & 0x000F0000) >> 16));
+    SerialString[10] = HexToAscii((uint8_t)((Device_Serial0 & 0x0000F000) >> 12));
+    SerialString[12] = HexToAscii((uint8_t)((Device_Serial0 & 0x00000F00) >> 8));
+    SerialString[14] = HexToAscii((uint8_t)((Device_Serial0 & 0x000000F0) >> 4));
+    SerialString[16] = HexToAscii((uint8_t)((Device_Serial0 & 0x0000000F) >> 0));
   }
 }
 
