@@ -318,8 +318,7 @@ unsigned char PC_to_RDR_SetParameters(void) {
 
   ErrorCode = SLOT_NO_ERROR;
 
-  if (ErrorCode != SLOT_NO_ERROR)
-    return ErrorCode;
+     if(ErrorCode != SLOT_NO_ERROR) return ErrorCode; */
 
   // Answer of SetParameters	Test only for OpenPGG cards
   UsbMessageBuffer[OFFSET_BMESSAGETYPE] = RDR_TO_PC_PARAMETERS;
