@@ -382,7 +382,7 @@ unsigned char IFD_SetParameters(unsigned char *pParamBuffer, unsigned char T01) 
     NewIccParameters.Nad = 0x00;
   }
 
-  if ((Dmul64vsDI[(NewIccParameters.FiDi && 0x0F)] == 0) ||
+  if ((Dmul64vsDI[(NewIccParameters.FiDi & 0x0F)] == 0) ||
       (Dmul64vsDI[(NewIccParameters.FiDi >> 0x04)] == 0)) {
     return SLOTERROR_BAD_FIDI;
   }
