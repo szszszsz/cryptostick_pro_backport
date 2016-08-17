@@ -23,8 +23,6 @@
 #include "CCIDHID_usb_conf.h"
 #include "CCIDHID_usb_prop.h"
 #include "CCID_SlotErrorCode.h"
-#include "CCID_usb_conf.h"
-#include "CCID_usb_prop.h"
 #include "hw_config.h"
 #include "mass_mal.h"
 #include "memory.h"

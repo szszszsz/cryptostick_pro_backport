@@ -2,7 +2,7 @@
 * Author: Copyright (C) Rudolf Boeddeker
 *Date: 2010-01-13
 *												STMicroelectronics
-*/ ST Rousset	 			Date:	22-V-2001
+* ST Rousset	 			Date:	22-V-2001
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -21,12 +21,12 @@
 */
 //#include "stm32f10x.h"
 
+#include "CCID_Crd.h"
 #include "CCID_Global.h"
+#include "CCID_Ifd_ccid.h"
+#include "CCID_Ifd_protocol.h"
 #include "CCID_Macro.h"
 #include "CCID_SlotErrorCode.h"
-#include "CCID_crd.h"
-#include "CCID_ifd_ccid.h"
-#include "CCID_ifd_protocol.h"
 #include "CCID_usb.h"
 #include "smartcard.h"
 #include "type.h"
@@ -318,7 +318,7 @@ unsigned char PC_to_RDR_SetParameters(void) {
 
   ErrorCode = SLOT_NO_ERROR;
 
-     if(ErrorCode != SLOT_NO_ERROR) return ErrorCode; */
+  /*if(ErrorCode != SLOT_NO_ERROR) return ErrorCode; */
 
   // Answer of SetParameters	Test only for OpenPGG cards
   UsbMessageBuffer[OFFSET_BMESSAGETYPE] = RDR_TO_PC_PARAMETERS;
