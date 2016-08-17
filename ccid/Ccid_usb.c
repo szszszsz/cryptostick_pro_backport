@@ -2,7 +2,7 @@
 * Author: Copyright (C) Rudolf Boeddeker
 *Date: 2010-01-13
 *												STMicroelectronics
-*/ ST Rousset	 	Date:	04/05/2000
+* ST Rousset	 	Date:	04/05/2000
 *
 * This file is part of GPF Crypto Stick.
 *
