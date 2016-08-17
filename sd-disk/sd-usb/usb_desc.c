@@ -96,15 +96,14 @@ const uint8_t MASS_StringVendor[MASS_SIZ_STRING_VENDOR] = {
     0x03,                   /* bDescriptorType = String descriptor */
 
     /* Manufacturer: "CryptoStick" - 11 * 2 + 2 = 24 byte*/
-    'C', 0, 'r', 0, 'y', 0, 'p', 0, 't', 0, 'o', 0, 'S', 0, 't', 0, 'i', 0, 'c', 0, 'k', 0};
+    'N', 0, 'i', 0, 't', 0, 'r', 0, 'o', 0, 'k', 0, 'e', 0, 'y'};
 
 const uint8_t MASS_StringProduct[MASS_SIZ_STRING_PRODUCT] = {
     MASS_SIZ_STRING_PRODUCT, 0x03,
     /* Product name: "CryptoStick 2.0  SD device" - 26 * 2 + 2 = 54 byte */
-    'C', 0, 'r', 0, 'y', 0, 'p', 0, 't', 0, 'o', 0, 'S', 0, 't', 0, 'i', 0, 'c', 0, 'k', 0, ' ', 0,
-    '2', 0, '.', 0, '0', 0, ' ', 0, ' ', 0, 'S', 0, 'D', 0, ' ', 0, 'd', 0, 'e', 0, 'v', 0, 'i', 0,
-    'c', 0, 'e', 0,
-};
+    'N', 0, 'i', 0, 't', 0, 'r', 0, 'o', 0, 'k', 0, 'e', 0, 'y', 0, ' ', 0, 'S', 0, 't', 0, 'o', 0,
+    'r', 0, 'a', 0, 'g', 0, 'e', ' ', 0, 'S', 0, 'D', 0, ' ', 0, 'd', 0, 'e', 0, 'v', 0, 'i', 0,
+    'c', 0, 'e', 0};
 
 uint8_t MASS_StringSerial[MASS_SIZ_STRING_SERIAL] = {
     MASS_SIZ_STRING_SERIAL, 0x03,
