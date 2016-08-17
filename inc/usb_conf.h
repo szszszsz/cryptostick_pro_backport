@@ -29,7 +29,7 @@
 /* EP_NUM */
 /* defines how many endpoints are used by the device */
 /*-------------------------------------------------------------*/
-#define EP_NUM (3)
+#define EP_NUM (5)
 
 /*-------------------------------------------------------------*/
 /* --------------   Buffer Description Table  -----------------*/
@@ -45,7 +45,7 @@
 
 /* EP1  */
 /* Tx buffer base address */
-#define ENDP1_TXADDR (0x098)
+#define ENDP1_TXADDR (0x98)
 
 /* EP2  */
 /* Rx buffer base address */
@@ -53,18 +53,21 @@
 /* Tx buffer base address */
 #define ENDP2_TXADDR (0x118)
 
+#define ENDP4_TXADDR (0x19C)
 /* ISTR events */
 /* IMR_MSK */
 /* mask defining which events has to be handled */
 /* by the device application software */
-#define IMR_MSK (CNTR_CTRM | CNTR_RESETM)
+// #define IMR_MSK (CNTR_CTRM | CNTR_RESETM)
+#define IMR_MSK                                                                                    \
+  (CNTR_CTRM | CNTR_WKUPM | CNTR_SUSPM | CNTR_ERRM | CNTR_SOFM | CNTR_ESOFM | CNTR_RESETM)
 
 /* CTR service routines */
 /* associated to defined endpoints */
 //#define  EP1_IN_Callback   NOP_Process
 //#define  EP2_IN_Callback   NOP_Process
 #define EP3_IN_Callback NOP_Process
-#define EP4_IN_Callback NOP_Process
+// #define EP4_IN_Callback NOP_Process
 #define EP5_IN_Callback NOP_Process
 #define EP6_IN_Callback NOP_Process
 #define EP7_IN_Callback NOP_Process
