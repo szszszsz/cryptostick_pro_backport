@@ -29,11 +29,13 @@
 #include "usb_desc.h"
 #include "usb_pwr.h"
 
+#include "CCIDHID_usb_desc.h"
 #include "CCID_usb.h"
 #include "CCID_usb_desc.h"
 #include "CCID_usb_prop.h"
 #include "RAMDISK_usb_desc.h"
 
+#include "CcidLocalAccess.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -249,17 +251,9 @@ void USB_Interrupts_Config(void) {
 
 void USB_Cable_Config(FunctionalState NewState) {
   if (NewState != DISABLE) {
-#ifdef USE_BOARD_STICK_V12
     GPIO_SetBits(USB_DISCONNECT, USB_DISCONNECT_PIN); // Stick V12
-#else
-    GPIO_ResetBits(USB_DISCONNECT, USB_DISCONNECT_PIN); // development board
-#endif
   } else {
-#ifdef USE_BOARD_STICK_V12
     GPIO_ResetBits(USB_DISCONNECT, USB_DISCONNECT_PIN); // Stick V12
-#else
-    GPIO_SetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);   // development board
-#endif
   }
 }
 
@@ -384,11 +378,7 @@ void USB_Disconnect_Config(void) {
   GPIO_InitStructure.GPIO_Pin = USB_DISCONNECT_PIN;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 
-#ifdef USE_BOARD_STICK_V12
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; // Stick V12
-#else
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;      // development board
-#endif
 
   GPIO_Init(USB_DISCONNECT, &GPIO_InitStructure);
 
