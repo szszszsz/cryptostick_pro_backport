@@ -32,6 +32,7 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+extern __IO uint8_t PrevXferComplete;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -43,20 +44,8 @@
 * Return         : None.
 *******************************************************************************/
 void EP1_IN_Callback(void) {
-  switch (nGlobalStickState) {
-  case STICK_STATE_RAMDISK:
-    Mass_Storage_In();
-    break;
-  case STICK_STATE_SD_DISK:
-    Mass_Storage_In();
-    break;
 
-  case STICK_STATE_SMARTCARD:
-    break;
 
-  case STICK_STATE_COMPOSITE:
-    break;
-  }
 }
 
 /*******************************************************************************
@@ -66,24 +55,7 @@ void EP1_IN_Callback(void) {
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void EP2_OUT_Callback(void) {
-  switch (nGlobalStickState) {
-  case STICK_STATE_RAMDISK:
-    Mass_Storage_Out();
-    break;
-
-  case STICK_STATE_SD_DISK:
-    Mass_Storage_Out();
-    break;
-
-  case STICK_STATE_SMARTCARD:
-    CCID_BulkOutMessage();
-    break;
-
-  case STICK_STATE_COMPOSITE:
-    break;
-  }
-}
+void EP2_OUT_Callback(void) { CCID_BulkOutMessage(); }
 
 /*******************************************************************************
 * Function Name  : EP2_IN_Callback.
@@ -92,18 +64,19 @@ void EP2_OUT_Callback(void) {
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void EP2_IN_Callback(void) {
-  switch (nGlobalStickState) {
-  case STICK_STATE_RAMDISK:
-    break;
+void EP2_IN_Callback(void) { CCID_BulkInMessage(); }
 
-  case STICK_STATE_SD_DISK:
-    break;
+void XEP3_IN_Callback(void) {
+  /* Set the transfer complete token to inform upper layer that the current transfer has been
+   * complete */
+  PrevXferComplete = 1;
+  // SwitchSmartcardLED(DISABLE);
+}
 
-  case STICK_STATE_SMARTCARD:
-    CCID_BulkInMessage();
-    break;
-  case STICK_STATE_COMPOSITE:
-    break;
-  }
+void EP4_IN_Callback(void) {
+  /* Set the transfer complete token to inform upper layer that the current transfer has been
+   * complete */
+  PrevXferComplete = 1;
+  // SwitchSmartcardLED(DISABLE);
+}
 }
