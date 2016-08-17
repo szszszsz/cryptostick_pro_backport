@@ -165,19 +165,16 @@ const uint8_t CCID_StringVendor[CCID_SIZ_STRING_VENDOR] = {
     CCID_SIZ_STRING_VENDOR, /* Size of manufaturer string */
     0x03,                   /* bDescriptorType = String descriptor */
     /* Manufacturer: "German Privacy Foundation" */
-    'G', 0, 'e', 0, 'r', 0, 'm', 0, 'a', 0, 'n', 0, ' ', 0, 'P', 0, 'r', 0, 'i', 0, 'v', 0, 'a', 0,
-    'c', 0, 'y', 0, ' ', 0, 'F', 0, 'o', 0, 'u', 0, 'n', 0, 'd', 0, 'a', 0, 't', 0, 'i', 0, 'o', 0,
-    'n', 0
+    'N', 0, 'i', 0, 't', 0, 'r', 0, 'o', 0, 'k', 0, 'e', 0, 'y', 0};
 
-};
+
 
 const uint8_t CCID_StringProduct[CCID_SIZ_STRING_PRODUCT] = {
     CCID_SIZ_STRING_PRODUCT, 0x03,
     /* Product name: "Crypto Stick v1.2" */
-    'C', 0, 'r', 0, 'y', 0, 'p', 0, 't', 0, 'o', 0, ' ', 0, 'S', 0, 't', 0, 'i', 0, 'c', 0, 'k', 0,
-    ' ', 0, 'v', 0, '1', 0, '.', 0, '2', 0
+    'N', 0, 'i', 0, 't', 0, 'r', 0, 'o', 0, 'k', 0, 'e', 0, 'y', 0, ' ', 0, 'P', 0, 'r', 0, 'o', 0};
 
-};
+
 
 uint8_t CCID_StringSerial[CCID_SIZ_STRING_SERIAL] = {
     CCID_SIZ_STRING_SERIAL, 0x03,
