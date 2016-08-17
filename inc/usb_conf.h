@@ -1,7 +1,9 @@
 /*
 * Author: Copyright (C) Rudolf Boeddeker 					Date: 2010-01-13
-*												STMicroelectronics	 			Date:	04/27/2009
-*												 MCD Application Team			Version V3.0.1
+*												STMicroelectronics
+*Date:	04/27/2009
+*												 MCD
+*Application Team			Version V3.0.1
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -27,55 +29,52 @@
 /* EP_NUM */
 /* defines how many endpoints are used by the device */
 /*-------------------------------------------------------------*/
-#define EP_NUM                          (3)
+#define EP_NUM (3)
 
 /*-------------------------------------------------------------*/
 /* --------------   Buffer Description Table  -----------------*/
 /*-------------------------------------------------------------*/
 /* buffer table base address */
 
-#define BTABLE_ADDRESS      (0x00)
+#define BTABLE_ADDRESS (0x00)
 
 /* EP0  */
 /* rx/tx buffer base address */
-#define ENDP0_RXADDR        (0x018)
-#define ENDP0_TXADDR        (0x058)
+#define ENDP0_RXADDR (0x018)
+#define ENDP0_TXADDR (0x058)
 
 /* EP1  */
 /* Tx buffer base address */
-#define ENDP1_TXADDR        (0x098)
+#define ENDP1_TXADDR (0x098)
 
 /* EP2  */
 /* Rx buffer base address */
-#define ENDP2_RXADDR        (0x0D8)
+#define ENDP2_RXADDR (0x0D8)
 /* Tx buffer base address */
-#define ENDP2_TXADDR        (0x118)
-
+#define ENDP2_TXADDR (0x118)
 
 /* ISTR events */
 /* IMR_MSK */
 /* mask defining which events has to be handled */
 /* by the device application software */
-#define IMR_MSK (CNTR_CTRM  | CNTR_RESETM)
+#define IMR_MSK (CNTR_CTRM | CNTR_RESETM)
 
 /* CTR service routines */
 /* associated to defined endpoints */
 //#define  EP1_IN_Callback   NOP_Process
 //#define  EP2_IN_Callback   NOP_Process
-#define  EP3_IN_Callback   NOP_Process
-#define  EP4_IN_Callback   NOP_Process
-#define  EP5_IN_Callback   NOP_Process
-#define  EP6_IN_Callback   NOP_Process
-#define  EP7_IN_Callback   NOP_Process
+#define EP3_IN_Callback NOP_Process
+#define EP4_IN_Callback NOP_Process
+#define EP5_IN_Callback NOP_Process
+#define EP6_IN_Callback NOP_Process
+#define EP7_IN_Callback NOP_Process
 
-
-#define  EP1_OUT_Callback   NOP_Process
+#define EP1_OUT_Callback NOP_Process
 //#define  EP2_OUT_Callback   NOP_Process
-#define  EP3_OUT_Callback   NOP_Process
-#define  EP4_OUT_Callback   NOP_Process
-#define  EP5_OUT_Callback   NOP_Process
-#define  EP6_OUT_Callback   NOP_Process
-#define  EP7_OUT_Callback   NOP_Process
+#define EP3_OUT_Callback NOP_Process
+#define EP4_OUT_Callback NOP_Process
+#define EP5_OUT_Callback NOP_Process
+#define EP6_OUT_Callback NOP_Process
+#define EP7_OUT_Callback NOP_Process
 
 #endif /* __USB_CONF_H */
-

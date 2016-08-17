@@ -1,6 +1,7 @@
 /*
-* Author: Copyright (C) STMicroelectronics	 			
-*												MCD Application Team			Date:	04/06/2009
+* Author: Copyright (C) STMicroelectronics
+*												MCD Application
+*Team			Date:	04/06/2009
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -68,9 +69,9 @@ void CRC_SetIDRegister(uint8_t IDValue);
 uint8_t CRC_GetIDRegister(void);
 
 #endif /* __STM32F10x_CRC_H */
-/**
-  * @}
-  */
+       /**
+         * @}
+         */
 
 /**
   * @}
@@ -79,5 +80,3 @@ uint8_t CRC_GetIDRegister(void);
 /**
   * @}
   */
-
-

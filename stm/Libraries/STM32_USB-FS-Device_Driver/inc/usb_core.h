@@ -1,6 +1,7 @@
 /*
-* Author: Copyright (C) STMicroelectronics	 			
-*												MCD Application Team			Date:	04/27/2009
+* Author: Copyright (C) STMicroelectronics
+*												MCD Application
+*Team			Date:	04/27/2009
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -24,42 +25,36 @@
 
 /* Includes ------------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
-typedef enum _CONTROL_STATE
-{
-  WAIT_SETUP,       /* 0 */
-  SETTING_UP,       /* 1 */
-  IN_DATA,          /* 2 */
-  OUT_DATA,         /* 3 */
-  LAST_IN_DATA,     /* 4 */
-  LAST_OUT_DATA,    /* 5 */
-  WAIT_STATUS_IN,   /* 7 */
-  WAIT_STATUS_OUT,  /* 8 */
-  STALLED,          /* 9 */
-  PAUSE             /* 10 */
-} CONTROL_STATE;    /* The state machine states of a control pipe */
+typedef enum _CONTROL_STATE {
+  WAIT_SETUP,      /* 0 */
+  SETTING_UP,      /* 1 */
+  IN_DATA,         /* 2 */
+  OUT_DATA,        /* 3 */
+  LAST_IN_DATA,    /* 4 */
+  LAST_OUT_DATA,   /* 5 */
+  WAIT_STATUS_IN,  /* 7 */
+  WAIT_STATUS_OUT, /* 8 */
+  STALLED,         /* 9 */
+  PAUSE            /* 10 */
+} CONTROL_STATE;   /* The state machine states of a control pipe */
 
-typedef struct OneDescriptor
-{
+typedef struct OneDescriptor {
   uint8_t *Descriptor;
   uint16_t Descriptor_Size;
-}
-ONE_DESCRIPTOR, *PONE_DESCRIPTOR;
+} ONE_DESCRIPTOR, *PONE_DESCRIPTOR;
 /* All the request process routines return a value of this type
    If the return value is not SUCCESS or NOT_READY,
    the software will STALL the correspond endpoint */
-typedef enum _RESULT
-{
-  USB_SUCCESS = 0,    /* Process sucessfully */
+typedef enum _RESULT {
+  USB_SUCCESS = 0, /* Process sucessfully */
   USB_ERROR,
   USB_UNSUPPORT,
-  USB_NOT_READY       /* The process has not been finished, endpoint will be
-                         NAK to further rquest */
+  USB_NOT_READY /* The process has not been finished, endpoint will be
+                   NAK to further rquest */
 } RESULT;
 
-
 /*-*-*-*-*-*-*-*-*-*-* Definitions for endpoint level -*-*-*-*-*-*-*-*-*-*-*-*/
-typedef struct _ENDPOINT_INFO
-{
+typedef struct _ENDPOINT_INFO {
   /* When send data out of the device,
    CopyData() is used to get data buffer 'Length' bytes data
    if Length is 0,
@@ -82,54 +77,47 @@ typedef struct _ENDPOINT_INFO
    Usb_rLength is the data remain to be received,
    Usb_rPointer is the Offset of data buffer
   */
-  uint16_t  Usb_wLength;
-  uint16_t  Usb_wOffset;
-  uint16_t  PacketSize;
-  uint8_t   *(*CopyData)(uint16_t Length);
-}ENDPOINT_INFO;
+  uint16_t Usb_wLength;
+  uint16_t Usb_wOffset;
+  uint16_t PacketSize;
+  uint8_t *(*CopyData)(uint16_t Length);
+} ENDPOINT_INFO;
 
 /*-*-*-*-*-*-*-*-*-*-*-* Definitions for device level -*-*-*-*-*-*-*-*-*-*-*-*/
 
-typedef struct _DEVICE
-{
-  uint8_t Total_Endpoint;     /* Number of endpoints that are used */
-  uint8_t Total_Configuration;/* Number of configuration available */
-}
-DEVICE;
+typedef struct _DEVICE {
+  uint8_t Total_Endpoint;      /* Number of endpoints that are used */
+  uint8_t Total_Configuration; /* Number of configuration available */
+} DEVICE;
 
-typedef union
-{
+typedef union {
   uint16_t w;
-  struct BW
-  {
+  struct BW {
     uint8_t bb1;
     uint8_t bb0;
-  }
-  bw;
+  } bw;
 } uint16_t_uint8_t;
 
-typedef struct _DEVICE_INFO
-{
-  uint8_t USBbmRequestType;       /* bmRequestType */
-  uint8_t USBbRequest;            /* bRequest */
-  uint16_t_uint8_t USBwValues;         /* wValue */
-  uint16_t_uint8_t USBwIndexs;         /* wIndex */
-  uint16_t_uint8_t USBwLengths;        /* wLength */
+typedef struct _DEVICE_INFO {
+  uint8_t USBbmRequestType;     /* bmRequestType */
+  uint8_t USBbRequest;          /* bRequest */
+  uint16_t_uint8_t USBwValues;  /* wValue */
+  uint16_t_uint8_t USBwIndexs;  /* wIndex */
+  uint16_t_uint8_t USBwLengths; /* wLength */
 
-  uint8_t ControlState;           /* of type CONTROL_STATE */
+  uint8_t ControlState; /* of type CONTROL_STATE */
   uint8_t Current_Feature;
-  uint8_t Current_Configuration;   /* Selected configuration */
-  uint8_t Current_Interface;       /* Selected interface of current configuration */
-  uint8_t Current_AlternateSetting;/* Selected Alternate Setting of current
-                                     interface*/
+  uint8_t Current_Configuration;    /* Selected configuration */
+  uint8_t Current_Interface;        /* Selected interface of current configuration */
+  uint8_t Current_AlternateSetting; /* Selected Alternate Setting of current
+                                      interface*/
 
   ENDPOINT_INFO Ctrl_Info;
-}DEVICE_INFO;
+} DEVICE_INFO;
 
-typedef struct _DEVICE_PROP
-{
-  void (*Init)(void);        /* Initialize the device */
-  void (*Reset)(void);       /* Reset routine of this device */
+typedef struct _DEVICE_PROP {
+  void (*Init)(void);  /* Initialize the device */
+  void (*Reset)(void); /* Reset routine of this device */
 
   /* Device dependent process after the status stage */
   void (*Process_Status_IN)(void);
@@ -172,30 +160,28 @@ typedef struct _DEVICE_PROP
    and Alternate Setting are supported by the application or "UNSUPPORT" if they
    are not supported. */
 
-  RESULT  (*Class_Get_Interface_Setting)(uint8_t Interface, uint8_t AlternateSetting);
+  RESULT (*Class_Get_Interface_Setting)(uint8_t Interface, uint8_t AlternateSetting);
 
-  uint8_t* (*GetDeviceDescriptor)(uint16_t Length);
-  uint8_t* (*GetConfigDescriptor)(uint16_t Length);
-  uint8_t* (*GetStringDescriptor)(uint16_t Length);
+  uint8_t *(*GetDeviceDescriptor)(uint16_t Length);
+  uint8_t *(*GetConfigDescriptor)(uint16_t Length);
+  uint8_t *(*GetStringDescriptor)(uint16_t Length);
 
-  uint8_t* RxEP_buffer;
+  uint8_t *RxEP_buffer;
   uint8_t MaxPacketSize;
 
-}DEVICE_PROP;
+} DEVICE_PROP;
 
-typedef struct _USER_STANDARD_REQUESTS
-{
-  void (*User_GetConfiguration)(void);       /* Get Configuration */
-  void (*User_SetConfiguration)(void);       /* Set Configuration */
-  void (*User_GetInterface)(void);           /* Get Interface */
-  void (*User_SetInterface)(void);           /* Set Interface */
-  void (*User_GetStatus)(void);              /* Get Status */
-  void (*User_ClearFeature)(void);           /* Clear Feature */
-  void (*User_SetEndPointFeature)(void);     /* Set Endpoint Feature */
-  void (*User_SetDeviceFeature)(void);       /* Set Device Feature */
-  void (*User_SetDeviceAddress)(void);       /* Set Device Address */
-}
-USER_STANDARD_REQUESTS;
+typedef struct _USER_STANDARD_REQUESTS {
+  void (*User_GetConfiguration)(void);   /* Get Configuration */
+  void (*User_SetConfiguration)(void);   /* Set Configuration */
+  void (*User_GetInterface)(void);       /* Get Interface */
+  void (*User_SetInterface)(void);       /* Set Interface */
+  void (*User_GetStatus)(void);          /* Get Status */
+  void (*User_ClearFeature)(void);       /* Clear Feature */
+  void (*User_SetEndPointFeature)(void); /* Set Endpoint Feature */
+  void (*User_SetDeviceFeature)(void);   /* Set Device Feature */
+  void (*User_SetDeviceAddress)(void);   /* Set Device Address */
+} USER_STANDARD_REQUESTS;
 
 /* Exported constants --------------------------------------------------------*/
 #define Type_Recipient (pInformation->USBbmRequestType & (REQUEST_TYPE | RECIPIENT))
@@ -234,20 +220,16 @@ RESULT Standard_ClearFeature(void);
 void SetDeviceAddress(uint8_t);
 void NOP_Process(void);
 
-extern DEVICE_PROP            *Device_Property;
+extern DEVICE_PROP *Device_Property;
 extern USER_STANDARD_REQUESTS *User_Standard_Requests;
-extern DEVICE                 *Device_Table;
-extern DEVICE_INFO            *Device_Info;
-extern ONE_DESCRIPTOR         *Device_Descriptor;
-extern ONE_DESCRIPTOR         *Config_Descriptor;
-extern ONE_DESCRIPTOR         *String_Descriptor[5]; 
-
-
+extern DEVICE *Device_Table;
+extern DEVICE_INFO *Device_Info;
+extern ONE_DESCRIPTOR *Device_Descriptor;
+extern ONE_DESCRIPTOR *Config_Descriptor;
+extern ONE_DESCRIPTOR *String_Descriptor[5];
 
 /* cells saving status during interrupt servicing */
 extern uint16_t SaveRState;
 extern uint16_t SaveTState;
 
 #endif /* __USB_CORE_H */
-
-

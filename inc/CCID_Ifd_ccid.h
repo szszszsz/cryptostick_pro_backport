@@ -1,6 +1,8 @@
 /*
-* Author: Copyright (C) STMicroelectronics	 											Date:	29-V-2001
-*												 MICROCONTROLLER DIVISION / ST Rousset		Version V 0.00
+* Author: Copyright (C) STMicroelectronics
+*Date:	29-V-2001
+*												 MICROCONTROLLER
+*DIVISION / ST Rousset		Version V 0.00
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -18,8 +20,7 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define		ICC_DATA_BLOCK_MAX_SIZE		261
-
+#define ICC_DATA_BLOCK_MAX_SIZE 261
 
 unsigned char PC_to_RDR_IccPowerOn(void);
 unsigned char PC_to_RDR_IccPowerOff(void);
@@ -42,4 +43,3 @@ void RDR_to_PC_NotifySlotChange(void);
 void RDR_to_PC_HardwareError(void);
 
 void CmdNotSupported(void);
-

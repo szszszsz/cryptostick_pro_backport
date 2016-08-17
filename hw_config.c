@@ -1,7 +1,8 @@
 /*
 * Author: Copyright (C) Rudolf Boeddeker 					Date: 2010-01-13
-*												STMicroelectronics	 			
-*												MCD Application Team			Date:	04/27/2009
+*												STMicroelectronics
+*												MCD Application
+*Team			Date:	04/27/2009
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -20,17 +21,17 @@
 */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f10x_it.h"
 #include "hw_config.h"
-#include "sdcard.h"
-#include "platform_config.h"
 #include "mass_mal.h"
+#include "platform_config.h"
+#include "sdcard.h"
+#include "stm32f10x_it.h"
 #include "usb_desc.h"
 #include "usb_pwr.h"
 
 #include "CCID_usb.h"
-#include "CCID_usb_prop.h"
 #include "CCID_usb_desc.h"
+#include "CCID_usb_prop.h"
 #include "RAMDISK_usb_desc.h"
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,88 +50,77 @@ void RCC_Config(void);
 
 *******************************************************************************/
 
-void DisableFirmwareDownloadPort (void)
-{
+void DisableFirmwareDownloadPort(void) {
   GPIO_InitTypeDef GPIO_InitStructure;
 
-// enable port clock
+  // enable port clock
   RCC_APB2PeriphClockCmd(FIRMWARE_DL_PERIPH, ENABLE);
 
-// set pin modes
-  GPIO_InitStructure.GPIO_Pin   = SMARTCARD_POWER_PIN_1 | SMARTCARD_POWER_PIN_2;
-  GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_IN_FLOATING;
+  // set pin modes
+  GPIO_InitStructure.GPIO_Pin = SMARTCARD_POWER_PIN_1 | SMARTCARD_POWER_PIN_2;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(FIRMWARE_DL_PIN_PORT, &GPIO_InitStructure);
-
 }
 
 /*******************************************************************************
 
   DisableSmartcardLED
 
-	not installed
+        not installed
 
 *******************************************************************************/
 
-void DisableSmartcardLED (void)
-{
-/*  
-	GPIO_InitTypeDef GPIO_InitStructure;
+void DisableSmartcardLED(void) {
+  /*
+          GPIO_InitTypeDef GPIO_InitStructure;
 
-// enable port clock
-  RCC_APB2PeriphClockCmd(SMARTCARD_LED_PERIPH, ENABLE);
+  // enable port clock
+    RCC_APB2PeriphClockCmd(SMARTCARD_LED_PERIPH, ENABLE);
 
-// set pin modes
-  GPIO_InitStructure.GPIO_Pin   = SMARTCARD_LED_PIN;
-  GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_IN_FLOATING;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(SMARTCARD_LED_PIN_PORT, &GPIO_InitStructure);
-*/
+  // set pin modes
+    GPIO_InitStructure.GPIO_Pin   = SMARTCARD_LED_PIN;
+    GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_IN_FLOATING;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(SMARTCARD_LED_PIN_PORT, &GPIO_InitStructure);
+  */
 }
 
 /*******************************************************************************
 
   EnableSmartcardLED
 
-	not installed
+        not installed
 
 *******************************************************************************/
 
-void EnableSmartcardLED (void)
-{
+void EnableSmartcardLED(void) {
   GPIO_InitTypeDef GPIO_InitStructure;
 
-// enable port clock
+  // enable port clock
   RCC_APB2PeriphClockCmd(SMARTCARD_LED_PERIPH, ENABLE);
 
-// set pin modes
-  GPIO_InitStructure.GPIO_Pin   = SMARTCARD_LED_PIN;
-  GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;
+  // set pin modes
+  GPIO_InitStructure.GPIO_Pin = SMARTCARD_LED_PIN;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(SMARTCARD_LED_PIN_PORT, &GPIO_InitStructure);
-
 }
 
 /*******************************************************************************
 
- 	SwitchSmartcardLED
+        SwitchSmartcardLED
 
 *******************************************************************************/
 
-void SwitchSmartcardLED (FunctionalState NewState)
-{
+void SwitchSmartcardLED(FunctionalState NewState) {
 
-  if (NewState == ENABLE)
-  {
+  if (NewState == ENABLE) {
     GPIO_SetBits(SMARTCARD_LED_PIN_PORT, SMARTCARD_LED_PIN);
-  }
-  else
-  {
+  } else {
     GPIO_ResetBits(SMARTCARD_LED_PIN_PORT, SMARTCARD_LED_PIN);
   }
-
 }
-
 
 /*******************************************************************************
 * Function Name  : Set_System
@@ -139,39 +129,36 @@ void SwitchSmartcardLED (FunctionalState NewState)
 * Return         : None.
 *******************************************************************************/
 
-void Set_System(void)
-{
-/* RCC configuration */
+void Set_System(void) {
+  /* RCC configuration */
   RCC_Config();
 
-/* Enable and GPIOD clock */
+  /* Enable and GPIOD clock */
   USB_Disconnect_Config();
 
-/* Disable firmware download port */
- 	DisableFirmwareDownloadPort ();
+  /* Disable firmware download port */
+  DisableFirmwareDownloadPort();
 
-/* Disable smartcard LED*/
-//  DisableSmartcardLED ();
-	EnableSmartcardLED ();
+  /* Disable smartcard LED*/
+  //  DisableSmartcardLED ();
+  EnableSmartcardLED();
 
-/* MAL configuration */
-	switch (nGlobalStickState)
-	{
-		case STICK_STATE_RAMDISK	 :
-																	break;
+  /* MAL configuration */
+  switch (nGlobalStickState) {
+  case STICK_STATE_RAMDISK:
+    break;
 
-		case STICK_STATE_SD_DISK	 :
-  																MAL_Config();
-																	break;
+  case STICK_STATE_SD_DISK:
+    MAL_Config();
+    break;
 
-		case STICK_STATE_SMARTCARD :
-																  CCID_Init();	// set CCID default values 
-																	break;
+  case STICK_STATE_SMARTCARD:
+    CCID_Init(); // set CCID default values
+    break;
 
-		case STICK_STATE_COMPOSITE :	
-																	break;
-	}
-
+  case STICK_STATE_COMPOSITE:
+    break;
+  }
 }
 
 /*******************************************************************************
@@ -181,8 +168,7 @@ void Set_System(void)
 * Return         : None.
 *******************************************************************************/
 
-void Set_USBClock(void)
-{
+void Set_USBClock(void) {
   /* USBCLK = PLLCLK */
   RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);
 
@@ -197,8 +183,7 @@ void Set_USBClock(void)
 * Return         : None.
 *******************************************************************************/
 
-void Enter_LowPowerMode(void)
-{
+void Enter_LowPowerMode(void) {
   /* Set the device state to suspend */
   bDeviceState = SUSPENDED;
 }
@@ -210,21 +195,16 @@ void Enter_LowPowerMode(void)
 * Return         : None.
 *******************************************************************************/
 
-void Leave_LowPowerMode(void)
-{
+void Leave_LowPowerMode(void) {
   DEVICE_INFO *pInfo = Device_Info;
 
   /* Set the device state to the correct state */
-  if (pInfo->Current_Configuration != 0)
-  {
+  if (pInfo->Current_Configuration != 0) {
     /* Device configured */
     bDeviceState = CONFIGURED;
-  }
-  else
-  {
+  } else {
     bDeviceState = ATTACHED;
   }
-
 }
 
 /*******************************************************************************
@@ -234,8 +214,7 @@ void Leave_LowPowerMode(void)
 * Return         : None.
 *******************************************************************************/
 
-void USB_Interrupts_Config(void)
-{
+void USB_Interrupts_Config(void) {
   NVIC_InitTypeDef NVIC_InitStructure;
 
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
@@ -251,15 +230,14 @@ void USB_Interrupts_Config(void)
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
-  
-#ifdef USB_4BIT_SD_CARD_INTERFACE  
+
+#ifdef USB_4BIT_SD_CARD_INTERFACE
   NVIC_InitStructure.NVIC_IRQChannel = SDIO_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
 #endif /* USB_4BIT_SD_CARD_INTERFACE */
-  
 }
 
 /*******************************************************************************
@@ -269,22 +247,18 @@ void USB_Interrupts_Config(void)
 * Return         : Status
 *******************************************************************************/
 
-void USB_Cable_Config (FunctionalState NewState)
-{
-  if (NewState != DISABLE)
-  {
+void USB_Cable_Config(FunctionalState NewState) {
+  if (NewState != DISABLE) {
 #ifdef USE_BOARD_STICK_V12
-    GPIO_SetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);				 	// Stick V12
+    GPIO_SetBits(USB_DISCONNECT, USB_DISCONNECT_PIN); // Stick V12
 #else
-    GPIO_ResetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);			 	// development board
+    GPIO_ResetBits(USB_DISCONNECT, USB_DISCONNECT_PIN); // development board
 #endif
-  }
-  else
-  {
+  } else {
 #ifdef USE_BOARD_STICK_V12
-    GPIO_ResetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);				// Stick V12
+    GPIO_ResetBits(USB_DISCONNECT, USB_DISCONNECT_PIN); // Stick V12
 #else
-   	GPIO_SetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);					// development board
+    GPIO_SetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);   // development board
 #endif
   }
 }
@@ -295,13 +269,11 @@ void USB_Cable_Config (FunctionalState NewState)
 
 *******************************************************************************/
 
-char HexToAscii (uint8_t nHex)
-{
-	if (10 > nHex)
-	{
-		return (nHex + '0');
-	}
-	return (nHex + 'A' - 10);
+char HexToAscii(uint8_t nHex) {
+  if (10 > nHex) {
+    return (nHex + '0');
+  }
+  return (nHex + 'A' - 10);
 }
 
 /*******************************************************************************
@@ -312,64 +284,60 @@ char HexToAscii (uint8_t nHex)
 * Return         : None.
 *******************************************************************************/
 
-void Get_SerialNum(void)
-{
+void Get_SerialNum(void) {
   uint32_t Device_Serial0, Device_Serial1, Device_Serial2;
-	uint8_t  *SerialString;
-/*
-  Device_Serial0 = *(__IO uint32_t*)(0x1FFFF7E8);			// UNIQUE DEVICE ID
-  Device_Serial1 = *(__IO uint32_t*)(0x1FFFF7EC);
-  Device_Serial2 = *(__IO uint32_t*)(0x1FFFF7F0);
-*/
-// No device id	
-  Device_Serial0 = 0;			
+  uint8_t *SerialString;
+  /*
+    Device_Serial0 = *(__IO uint32_t*)(0x1FFFF7E8);			// UNIQUE DEVICE ID
+    Device_Serial1 = *(__IO uint32_t*)(0x1FFFF7EC);
+    Device_Serial2 = *(__IO uint32_t*)(0x1FFFF7F0);
+  */
+  // No device id
+  Device_Serial0 = 0;
   Device_Serial1 = 0;
   Device_Serial2 = 0;
 
+  SerialString = MASS_StringSerial; // default value
 
-	SerialString = MASS_StringSerial; // default value
+  switch (nGlobalStickState) {
+  case STICK_STATE_RAMDISK:
+    SerialString = RAMDISK_StringSerial;
+    break;
+  case STICK_STATE_SD_DISK:
+    SerialString = MASS_StringSerial;
+    break;
+  case STICK_STATE_SMARTCARD:
+    SerialString = CCID_StringSerial;
+    break;
+  }
 
-	switch (nGlobalStickState)
-	{
-		case STICK_STATE_RAMDISK	 :
-																	SerialString = RAMDISK_StringSerial;
-																	break;
-		case STICK_STATE_SD_DISK	 :
-																	SerialString = MASS_StringSerial; 
-																	break;
-		case STICK_STATE_SMARTCARD :
-																	SerialString = CCID_StringSerial; 																	
-																	break;
-	}	
+  if (Device_Serial0 != 0) {
+    SerialString[48] = HexToAscii((uint8_t)((Device_Serial2 & 0xF0000000) >> 28));
+    SerialString[46] = HexToAscii((uint8_t)((Device_Serial2 & 0x0F000000) >> 24));
+    SerialString[44] = HexToAscii((uint8_t)((Device_Serial2 & 0x00F00000) >> 20));
+    SerialString[42] = HexToAscii((uint8_t)((Device_Serial2 & 0x000F0000) >> 16));
+    SerialString[40] = HexToAscii((uint8_t)((Device_Serial2 & 0x0000F000) >> 12));
+    SerialString[38] = HexToAscii((uint8_t)((Device_Serial2 & 0x00000F00) >> 8));
+    SerialString[36] = HexToAscii((uint8_t)((Device_Serial2 & 0x000000F0) >> 4));
+    SerialString[34] = HexToAscii((uint8_t)((Device_Serial2 & 0x0000000F) >> 0));
 
-  if (Device_Serial0 != 0)
-  {
-    SerialString[48] = HexToAscii ((uint8_t) ((Device_Serial2 & 0xF0000000) >> 28));
-    SerialString[46] = HexToAscii ((uint8_t) ((Device_Serial2 & 0x0F000000) >> 24));
-    SerialString[44] = HexToAscii ((uint8_t) ((Device_Serial2 & 0x00F00000) >> 20));
-    SerialString[42] = HexToAscii ((uint8_t) ((Device_Serial2 & 0x000F0000) >> 16));
-    SerialString[40] = HexToAscii ((uint8_t) ((Device_Serial2 & 0x0000F000) >> 12));
-    SerialString[38] = HexToAscii ((uint8_t) ((Device_Serial2 & 0x00000F00) >>  8));
-    SerialString[36] = HexToAscii ((uint8_t) ((Device_Serial2 & 0x000000F0) >>  4));
-    SerialString[34] = HexToAscii ((uint8_t) ((Device_Serial2 & 0x0000000F) >>  0));
+    SerialString[32] = HexToAscii((uint8_t)((Device_Serial1 & 0xF0000000) >> 28));
+    SerialString[30] = HexToAscii((uint8_t)((Device_Serial1 & 0x0F000000) >> 24));
+    SerialString[28] = HexToAscii((uint8_t)((Device_Serial1 & 0x00F00000) >> 20));
+    SerialString[26] = HexToAscii((uint8_t)((Device_Serial1 & 0x000F0000) >> 16));
+    SerialString[24] = HexToAscii((uint8_t)((Device_Serial1 & 0x0000F000) >> 12));
+    SerialString[22] = HexToAscii((uint8_t)((Device_Serial1 & 0x00000F00) >> 8));
+    SerialString[20] = HexToAscii((uint8_t)((Device_Serial1 & 0x000000F0) >> 4));
+    SerialString[18] = HexToAscii((uint8_t)((Device_Serial1 & 0x0000000F) >> 0));
 
-    SerialString[32] = HexToAscii ((uint8_t) ((Device_Serial1 & 0xF0000000) >> 28));
-    SerialString[30] = HexToAscii ((uint8_t) ((Device_Serial1 & 0x0F000000) >> 24));
-    SerialString[28] = HexToAscii ((uint8_t) ((Device_Serial1 & 0x00F00000) >> 20));
-    SerialString[26] = HexToAscii ((uint8_t) ((Device_Serial1 & 0x000F0000) >> 16));
-    SerialString[24] = HexToAscii ((uint8_t) ((Device_Serial1 & 0x0000F000) >> 12));
-    SerialString[22] = HexToAscii ((uint8_t) ((Device_Serial1 & 0x00000F00) >>  8));
-    SerialString[20] = HexToAscii ((uint8_t) ((Device_Serial1 & 0x000000F0) >>  4));
-    SerialString[18] = HexToAscii ((uint8_t) ((Device_Serial1 & 0x0000000F) >>  0));
-
-    SerialString[16] = HexToAscii ((uint8_t) ((Device_Serial0 & 0xF0000000) >> 28));
-    SerialString[14] = HexToAscii ((uint8_t) ((Device_Serial0 & 0x0F000000) >> 24));
-    SerialString[12] = HexToAscii ((uint8_t) ((Device_Serial0 & 0x00F00000) >> 20));
-    SerialString[10] = HexToAscii ((uint8_t) ((Device_Serial0 & 0x000F0000) >> 16));
-    SerialString [8] = HexToAscii ((uint8_t) ((Device_Serial0 & 0x0000F000) >> 12));
-    SerialString [6] = HexToAscii ((uint8_t) ((Device_Serial0 & 0x00000F00) >>  8));
-    SerialString [4] = HexToAscii ((uint8_t) ((Device_Serial0 & 0x000000F0) >>  4));
-    SerialString [2] = HexToAscii ((uint8_t) ((Device_Serial0 & 0x0000000F) >>  0));
+    SerialString[16] = HexToAscii((uint8_t)((Device_Serial0 & 0xF0000000) >> 28));
+    SerialString[14] = HexToAscii((uint8_t)((Device_Serial0 & 0x0F000000) >> 24));
+    SerialString[12] = HexToAscii((uint8_t)((Device_Serial0 & 0x00F00000) >> 20));
+    SerialString[10] = HexToAscii((uint8_t)((Device_Serial0 & 0x000F0000) >> 16));
+    SerialString[8] = HexToAscii((uint8_t)((Device_Serial0 & 0x0000F000) >> 12));
+    SerialString[6] = HexToAscii((uint8_t)((Device_Serial0 & 0x00000F00) >> 8));
+    SerialString[4] = HexToAscii((uint8_t)((Device_Serial0 & 0x000000F0) >> 4));
+    SerialString[2] = HexToAscii((uint8_t)((Device_Serial0 & 0x0000000F) >> 0));
   }
 }
 
@@ -379,12 +347,10 @@ void Get_SerialNum(void)
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void RCC_Config(void)
-{ 
- /* Setup the microcontroller system. Initialize the Embedded Flash Interface,  
-     initialize the PLL and update the SystemFrequency variable. */
+void RCC_Config(void) {
+  /* Setup the microcontroller system. Initialize the Embedded Flash Interface,
+      initialize the PLL and update the SystemFrequency variable. */
   SystemInit();
-
 }
 
 /*******************************************************************************
@@ -393,8 +359,7 @@ void RCC_Config(void)
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void MAL_Config(void)
-{
+void MAL_Config(void) {
   MAL_Init();
 
 #ifdef USB_4BIT_SD_CARD_INTERFACE
@@ -409,26 +374,23 @@ void MAL_Config(void)
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void USB_Disconnect_Config(void)
-{
+void USB_Disconnect_Config(void) {
   GPIO_InitTypeDef GPIO_InitStructure;
 
   /* Enable USB_DISCONNECT GPIO clock */
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIO_DISCONNECT, ENABLE);
 
   /* USB_DISCONNECT_PIN used as USB pull-up */
-  GPIO_InitStructure.GPIO_Pin   = USB_DISCONNECT_PIN;
+  GPIO_InitStructure.GPIO_Pin = USB_DISCONNECT_PIN;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 
 #ifdef USE_BOARD_STICK_V12
-  GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;					// Stick V12
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; // Stick V12
 #else
-  GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_OD;					// development board
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;      // development board
 #endif
 
   GPIO_Init(USB_DISCONNECT, &GPIO_InitStructure);
 
   USB_Cable_Config(DISABLE);
-
 }
-

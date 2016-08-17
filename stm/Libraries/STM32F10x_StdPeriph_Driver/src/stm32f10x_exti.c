@@ -1,6 +1,7 @@
 /*
-* Author: Copyright (C) STMicroelectronics	 			
-*												MCD Application Team			Date:	04/06/2009
+* Author: Copyright (C) STMicroelectronics
+*												MCD Application
+*Team			Date:	04/06/2009
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -25,7 +26,7 @@
   * @{
   */
 
-/** @defgroup EXTI 
+/** @defgroup EXTI
   * @brief EXTI driver modules
   * @{
   */
@@ -42,7 +43,7 @@
   * @{
   */
 
-#define EXTI_LineNone    ((uint32_t)0x00000)  /* No interrupt selected */
+#define EXTI_LineNone ((uint32_t)0x00000) /* No interrupt selected */
 
 /**
   * @}
@@ -77,17 +78,16 @@
   */
 
 /**
-  * @brief  Deinitializes the EXTI peripheral registers to their default 
+  * @brief  Deinitializes the EXTI peripheral registers to their default
   *   reset values.
   * @param  None
   * @retval : None
   */
-void EXTI_DeInit(void)
-{
+void EXTI_DeInit(void) {
   EXTI->IMR = 0x00000000;
   EXTI->EMR = 0x00000000;
-  EXTI->RTSR = 0x00000000; 
-  EXTI->FTSR = 0x00000000; 
+  EXTI->RTSR = 0x00000000;
+  EXTI->FTSR = 0x00000000;
   EXTI->PR = 0x0007FFFF;
 }
 
@@ -99,41 +99,37 @@ void EXTI_DeInit(void)
   *   peripheral.
   * @retval : None
   */
-void EXTI_Init(EXTI_InitTypeDef* EXTI_InitStruct)
-{
+void EXTI_Init(EXTI_InitTypeDef *EXTI_InitStruct) {
   /* Check the parameters */
   assert_param(IS_EXTI_MODE(EXTI_InitStruct->EXTI_Mode));
   assert_param(IS_EXTI_TRIGGER(EXTI_InitStruct->EXTI_Trigger));
-  assert_param(IS_EXTI_LINE(EXTI_InitStruct->EXTI_Line));  
+  assert_param(IS_EXTI_LINE(EXTI_InitStruct->EXTI_Line));
   assert_param(IS_FUNCTIONAL_STATE(EXTI_InitStruct->EXTI_LineCmd));
-     
-  if (EXTI_InitStruct->EXTI_LineCmd != DISABLE)
-  {
+
+  if (EXTI_InitStruct->EXTI_LineCmd != DISABLE) {
     /* Clear EXTI line configuration */
     EXTI->IMR &= ~EXTI_InitStruct->EXTI_Line;
     EXTI->EMR &= ~EXTI_InitStruct->EXTI_Line;
-    
-    *(__IO uint32_t *)(EXTI_BASE + (uint32_t)EXTI_InitStruct->EXTI_Mode)|= EXTI_InitStruct->EXTI_Line;
+
+    *(__IO uint32_t *)(EXTI_BASE + (uint32_t)EXTI_InitStruct->EXTI_Mode) |=
+        EXTI_InitStruct->EXTI_Line;
     /* Clear Rising Falling edge configuration */
     EXTI->RTSR &= ~EXTI_InitStruct->EXTI_Line;
     EXTI->FTSR &= ~EXTI_InitStruct->EXTI_Line;
-    
+
     /* Select the trigger for the selected external interrupts */
-    if (EXTI_InitStruct->EXTI_Trigger == EXTI_Trigger_Rising_Falling)
-    {
+    if (EXTI_InitStruct->EXTI_Trigger == EXTI_Trigger_Rising_Falling) {
       /* Rising Falling edge */
       EXTI->RTSR |= EXTI_InitStruct->EXTI_Line;
       EXTI->FTSR |= EXTI_InitStruct->EXTI_Line;
+    } else {
+      *(__IO uint32_t *)(EXTI_BASE + (uint32_t)EXTI_InitStruct->EXTI_Trigger) |=
+          EXTI_InitStruct->EXTI_Line;
     }
-    else
-    {
-      *(__IO uint32_t *)(EXTI_BASE + (uint32_t)EXTI_InitStruct->EXTI_Trigger)|= EXTI_InitStruct->EXTI_Line;
-    }
-  }
-  else
-  {
+  } else {
     /* Disable the selected external lines */
-    *(__IO uint32_t *)(EXTI_BASE + (uint32_t)EXTI_InitStruct->EXTI_Mode)&= ~EXTI_InitStruct->EXTI_Line;
+    *(__IO uint32_t *)(EXTI_BASE + (uint32_t)EXTI_InitStruct->EXTI_Mode) &=
+        ~EXTI_InitStruct->EXTI_Line;
   }
 }
 
@@ -143,8 +139,7 @@ void EXTI_Init(EXTI_InitTypeDef* EXTI_InitStruct)
   *   which will be initialized.
   * @retval : None
   */
-void EXTI_StructInit(EXTI_InitTypeDef* EXTI_InitStruct)
-{
+void EXTI_StructInit(EXTI_InitTypeDef *EXTI_InitStruct) {
   EXTI_InitStruct->EXTI_Line = EXTI_LineNone;
   EXTI_InitStruct->EXTI_Mode = EXTI_Mode_Interrupt;
   EXTI_InitStruct->EXTI_Trigger = EXTI_Trigger_Falling;
@@ -155,15 +150,14 @@ void EXTI_StructInit(EXTI_InitTypeDef* EXTI_InitStruct)
   * @brief  Generates a Software interrupt.
   * @param EXTI_Line: specifies the EXTI lines to be enabled or
   *   disabled.
-  *   This parameter can be any combination of EXTI_Linex where 
+  *   This parameter can be any combination of EXTI_Linex where
   *   x can be (0..18).
   * @retval : None
   */
-void EXTI_GenerateSWInterrupt(uint32_t EXTI_Line)
-{
+void EXTI_GenerateSWInterrupt(uint32_t EXTI_Line) {
   /* Check the parameters */
   assert_param(IS_EXTI_LINE(EXTI_Line));
-  
+
   EXTI->SWIER |= EXTI_Line;
 }
 
@@ -174,18 +168,14 @@ void EXTI_GenerateSWInterrupt(uint32_t EXTI_Line)
   * @arg EXTI_Linex: External interrupt line x where x(0..18)
   * @retval : The new state of EXTI_Line (SET or RESET).
   */
-FlagStatus EXTI_GetFlagStatus(uint32_t EXTI_Line)
-{
+FlagStatus EXTI_GetFlagStatus(uint32_t EXTI_Line) {
   FlagStatus bitstatus = RESET;
   /* Check the parameters */
   assert_param(IS_GET_EXTI_LINE(EXTI_Line));
-  
-  if ((EXTI->PR & EXTI_Line) != (uint32_t)RESET)
-  {
+
+  if ((EXTI->PR & EXTI_Line) != (uint32_t)RESET) {
     bitstatus = SET;
-  }
-  else
-  {
+  } else {
     bitstatus = RESET;
   }
   return bitstatus;
@@ -194,15 +184,14 @@ FlagStatus EXTI_GetFlagStatus(uint32_t EXTI_Line)
 /**
   * @brief  Clears the EXTI’s line pending flags.
   * @param EXTI_Line: specifies the EXTI lines flags to clear.
-  *   This parameter can be any combination of EXTI_Linex where 
+  *   This parameter can be any combination of EXTI_Linex where
   *   x can be (0..18).
   * @retval : None
   */
-void EXTI_ClearFlag(uint32_t EXTI_Line)
-{
+void EXTI_ClearFlag(uint32_t EXTI_Line) {
   /* Check the parameters */
   assert_param(IS_EXTI_LINE(EXTI_Line));
-  
+
   EXTI->PR = EXTI_Line;
 }
 
@@ -213,20 +202,16 @@ void EXTI_ClearFlag(uint32_t EXTI_Line)
   * @arg EXTI_Linex: External interrupt line x where x(0..18)
   * @retval : The new state of EXTI_Line (SET or RESET).
   */
-ITStatus EXTI_GetITStatus(uint32_t EXTI_Line)
-{
+ITStatus EXTI_GetITStatus(uint32_t EXTI_Line) {
   ITStatus bitstatus = RESET;
   uint32_t enablestatus = 0;
   /* Check the parameters */
   assert_param(IS_GET_EXTI_LINE(EXTI_Line));
-  
-  enablestatus =  EXTI->IMR & EXTI_Line;
-  if (((EXTI->PR & EXTI_Line) != (uint32_t)RESET) && (enablestatus != (uint32_t)RESET))
-  {
+
+  enablestatus = EXTI->IMR & EXTI_Line;
+  if (((EXTI->PR & EXTI_Line) != (uint32_t)RESET) && (enablestatus != (uint32_t)RESET)) {
     bitstatus = SET;
-  }
-  else
-  {
+  } else {
     bitstatus = RESET;
   }
   return bitstatus;
@@ -235,15 +220,14 @@ ITStatus EXTI_GetITStatus(uint32_t EXTI_Line)
 /**
   * @brief  Clears the EXTI’s line pending bits.
   * @param EXTI_Line: specifies the EXTI lines to clear.
-  *   This parameter can be any combination of EXTI_Linex where 
+  *   This parameter can be any combination of EXTI_Linex where
   *   x can be (0..18).
   * @retval : None
   */
-void EXTI_ClearITPendingBit(uint32_t EXTI_Line)
-{
+void EXTI_ClearITPendingBit(uint32_t EXTI_Line) {
   /* Check the parameters */
   assert_param(IS_EXTI_LINE(EXTI_Line));
-  
+
   EXTI->PR = EXTI_Line;
 }
 
@@ -258,4 +242,3 @@ void EXTI_ClearITPendingBit(uint32_t EXTI_Line)
 /**
   * @}
   */
-

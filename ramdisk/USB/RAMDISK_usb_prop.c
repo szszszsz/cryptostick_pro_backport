@@ -1,7 +1,8 @@
 /*
 * Author: Copyright (C) Rudolf Boeddeker 					Date: 2010-01-13
-*												STMicroelectronics	 			
-*												MCD Application Team			Date:	04/27/2009
+*												STMicroelectronics
+*												MCD Application
+*Team			Date:	04/27/2009
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -20,14 +21,14 @@
 */
 
 /* Includes ------------------------------------------------------------------*/
-#include "usb_lib.h"
-#include "RAMDISK_usb_desc.h"
-#include "usb_pwr.h"
-#include "usb_bot.h"
-#include "hw_config.h"
-#include "memory.h"
-#include "mass_mal.h"
 #include "RAMDISK_usb_prop.h"
+#include "RAMDISK_usb_desc.h"
+#include "hw_config.h"
+#include "mass_mal.h"
+#include "memory.h"
+#include "usb_bot.h"
+#include "usb_lib.h"
+#include "usb_pwr.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -37,14 +38,9 @@ uint32_t RAMDISK_Max_Lun = 0;
 
 DEVICE_INFO RAMDISK_Device_Info;
 
-DEVICE RAMDISK_Device_Table =
-  {
-    EP_NUM,
-    1
-  };
+DEVICE RAMDISK_Device_Table = {EP_NUM, 1};
 
-DEVICE_PROP RAMDISK_Device_Property =
-  {
+DEVICE_PROP RAMDISK_Device_Property = {
     RAMDISK_init,
     RAMDISK_Reset,
     RAMDISK_Status_In,
@@ -57,41 +53,28 @@ DEVICE_PROP RAMDISK_Device_Property =
     RAMDISK_GetStringDescriptor,
     0,
     0x40 /*MAX PACKET SIZE*/
-  };
+};
 
-USER_STANDARD_REQUESTS RAMDISK_User_Standard_Requests =
-  {
-    RAMDISK_Storage_GetConfiguration,
-    RAMDISK_Storage_SetConfiguration,
-    RAMDISK_Storage_GetInterface,
-    RAMDISK_Storage_SetInterface,
-    RAMDISK_Storage_GetStatus,
-    RAMDISK_Storage_ClearFeature,
-    RAMDISK_Storage_SetEndPointFeature,
-    RAMDISK_Storage_SetDeviceFeature,
-    RAMDISK_Storage_SetDeviceAddress
-  };
+USER_STANDARD_REQUESTS RAMDISK_User_Standard_Requests = {
+    RAMDISK_Storage_GetConfiguration,   RAMDISK_Storage_SetConfiguration,
+    RAMDISK_Storage_GetInterface,       RAMDISK_Storage_SetInterface,
+    RAMDISK_Storage_GetStatus,          RAMDISK_Storage_ClearFeature,
+    RAMDISK_Storage_SetEndPointFeature, RAMDISK_Storage_SetDeviceFeature,
+    RAMDISK_Storage_SetDeviceAddress};
 
-ONE_DESCRIPTOR RAMDISK_Device_Descriptor =
-  {
-    (uint8_t*)RAMDISK_DeviceDescriptor,
-    RAMDISK_SIZ_DEVICE_DESC
-  };
+ONE_DESCRIPTOR RAMDISK_Device_Descriptor = {(uint8_t *)RAMDISK_DeviceDescriptor,
+                                            RAMDISK_SIZ_DEVICE_DESC};
 
-ONE_DESCRIPTOR RAMDISK_Config_Descriptor =
-  {
-    (uint8_t*)RAMDISK_ConfigDescriptor,
-    RAMDISK_SIZ_CONFIG_DESC
-  };
+ONE_DESCRIPTOR RAMDISK_Config_Descriptor = {(uint8_t *)RAMDISK_ConfigDescriptor,
+                                            RAMDISK_SIZ_CONFIG_DESC};
 
-ONE_DESCRIPTOR RAMDISK_String_Descriptor[5] =
-  {
-    {(uint8_t*)RAMDISK_StringLangID, RAMDISK_SIZ_STRING_LANGID},
-    {(uint8_t*)RAMDISK_StringVendor, RAMDISK_SIZ_STRING_VENDOR},
-    {(uint8_t*)RAMDISK_StringProduct, RAMDISK_SIZ_STRING_PRODUCT},
-    {(uint8_t*)RAMDISK_StringSerial, RAMDISK_SIZ_STRING_SERIAL},
-    {(uint8_t*)RAMDISK_StringInterface, RAMDISK_SIZ_STRING_INTERFACE},
-  };
+ONE_DESCRIPTOR RAMDISK_String_Descriptor[5] = {
+    {(uint8_t *)RAMDISK_StringLangID, RAMDISK_SIZ_STRING_LANGID},
+    {(uint8_t *)RAMDISK_StringVendor, RAMDISK_SIZ_STRING_VENDOR},
+    {(uint8_t *)RAMDISK_StringProduct, RAMDISK_SIZ_STRING_PRODUCT},
+    {(uint8_t *)RAMDISK_StringSerial, RAMDISK_SIZ_STRING_SERIAL},
+    {(uint8_t *)RAMDISK_StringInterface, RAMDISK_SIZ_STRING_INTERFACE},
+};
 
 /*************************************************************************/
 /*
@@ -100,16 +83,15 @@ DEVICE_PROP            *Device_Property        = &RAMDISK_Device_Property;
 USER_STANDARD_REQUESTS *User_Standard_Requests = &RAMDISK_User_Standard_Requests;
 ONE_DESCRIPTOR         *Device_Descriptor      = &RAMDISK_Device_Descriptor;
 ONE_DESCRIPTOR         *Config_Descriptor      = &RAMDISK_Config_Descriptor;
-ONE_DESCRIPTOR         *String_Descriptor[5]   = { 
-																								   &RAMDISK_String_Descriptor[0],
-																								   &RAMDISK_String_Descriptor[1],
-																								   &RAMDISK_String_Descriptor[2],
-																								   &RAMDISK_String_Descriptor[3],
-																								   &RAMDISK_String_Descriptor[4],
-																								 };
+ONE_DESCRIPTOR         *String_Descriptor[5]   = {
+                                                                                                                                                                                                   &RAMDISK_String_Descriptor[0],
+                                                                                                                                                                                                   &RAMDISK_String_Descriptor[1],
+                                                                                                                                                                                                   &RAMDISK_String_Descriptor[2],
+                                                                                                                                                                                                   &RAMDISK_String_Descriptor[3],
+                                                                                                                                                                                                   &RAMDISK_String_Descriptor[4],
+                                                                                                                                                                                                 };
 */
 /*************************************************************************/
-
 
 /* Extern variables ----------------------------------------------------------*/
 extern unsigned char Bot_State;
@@ -125,8 +107,7 @@ extern Bulk_Only_CBW CBW;
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void RAMDISK_init()
-{
+void RAMDISK_init() {
   /* Update the serial number string descriptor with the data from the unique
   ID*/
   Get_SerialNum();
@@ -153,8 +134,7 @@ void RAMDISK_init()
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void RAMDISK_Reset()
-{
+void RAMDISK_Reset() {
   /* Set the device as not configured */
   Device_Info->Current_Configuration = 0;
 
@@ -185,7 +165,6 @@ void RAMDISK_Reset()
   SetEPRxStatus(ENDP2, EP_RX_VALID);
   SetEPTxStatus(ENDP2, EP_TX_DIS);
 
-
   SetEPRxCount(ENDP0, Device_Property->MaxPacketSize);
   SetEPRxValid(ENDP0);
 
@@ -205,10 +184,8 @@ void RAMDISK_Reset()
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void RAMDISK_Storage_SetConfiguration(void)
-{
-  if (pInformation->Current_Configuration != 0)
-  {
+void RAMDISK_Storage_SetConfiguration(void) {
+  if (pInformation->Current_Configuration != 0) {
     /* Device configured */
     bDeviceState = CONFIGURED;
 
@@ -225,8 +202,7 @@ void RAMDISK_Storage_SetConfiguration(void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void RAMDISK_Storage_ClearFeature(void)
-{
+void RAMDISK_Storage_ClearFeature(void) {
   /* when the host send a CBW with invalid signature or invalid length the two
      Endpoints (IN & OUT) shall stall until receiving a Mass Storage Reset     */
   if (CBW.dSignature != BOT_CBW_SIGNATURE)
@@ -240,10 +216,7 @@ void RAMDISK_Storage_ClearFeature(void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void RAMDISK_Storage_SetDeviceAddress (void)
-{
-  bDeviceState = ADDRESSED;
-}
+void RAMDISK_Storage_SetDeviceAddress(void) { bDeviceState = ADDRESSED; }
 /*******************************************************************************
 * Function Name  : RAMDISK_Status_In
 * Description    : Mass Storage Status IN routine.
@@ -251,10 +224,7 @@ void RAMDISK_Storage_SetDeviceAddress (void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void RAMDISK_Status_In(void)
-{
-  return;
-}
+void RAMDISK_Status_In(void) { return; }
 
 /*******************************************************************************
 * Function Name  : RAMDISK_Status_Out
@@ -263,10 +233,7 @@ void RAMDISK_Status_In(void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void RAMDISK_Status_Out(void)
-{
-  return;
-}
+void RAMDISK_Status_Out(void) { return; }
 
 /*******************************************************************************
 * Function Name  : RAMDISK_Data_Setup.
@@ -275,24 +242,19 @@ void RAMDISK_Status_Out(void)
 * Output         : None.
 * Return         : RESULT.
 *******************************************************************************/
-RESULT RAMDISK_Data_Setup(uint8_t RequestNo)
-{
-  uint8_t    *(*CopyRoutine)(uint16_t);
+RESULT RAMDISK_Data_Setup(uint8_t RequestNo) {
+  uint8_t *(*CopyRoutine)(uint16_t);
 
   CopyRoutine = NULL;
-  if ((Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT))
-      && (RequestNo == GET_MAX_LUN) && (pInformation->USBwValue == 0)
-      && (pInformation->USBwIndex == 0) && (pInformation->USBwLength == 0x01))
-  {
+  if ((Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT)) && (RequestNo == GET_MAX_LUN) &&
+      (pInformation->USBwValue == 0) && (pInformation->USBwIndex == 0) &&
+      (pInformation->USBwLength == 0x01)) {
     CopyRoutine = RAMDISK_Get_Max_Lun;
-  }
-  else
-  {
+  } else {
     return USB_UNSUPPORT;
   }
 
-  if (CopyRoutine == NULL)
-  {
+  if (CopyRoutine == NULL) {
     return USB_UNSUPPORT;
   }
 
@@ -301,7 +263,6 @@ RESULT RAMDISK_Data_Setup(uint8_t RequestNo)
   (*CopyRoutine)(0);
 
   return USB_SUCCESS;
-
 }
 
 /*******************************************************************************
@@ -311,12 +272,10 @@ RESULT RAMDISK_Data_Setup(uint8_t RequestNo)
 * Output         : None.
 * Return         : RESULT.
 *******************************************************************************/
-RESULT RAMDISK_NoData_Setup(uint8_t RequestNo)
-{
-  if ((Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT))
-      && (RequestNo == RAMDISK_STORAGE_RESET) && (pInformation->USBwValue == 0)
-      && (pInformation->USBwIndex == 0) && (pInformation->USBwLength == 0x00))
-  {
+RESULT RAMDISK_NoData_Setup(uint8_t RequestNo) {
+  if ((Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT)) &&
+      (RequestNo == RAMDISK_STORAGE_RESET) && (pInformation->USBwValue == 0) &&
+      (pInformation->USBwIndex == 0) && (pInformation->USBwLength == 0x00)) {
     /* Initialize Endpoint 1 */
     ClearDTOG_TX(ENDP1);
 
@@ -340,15 +299,11 @@ RESULT RAMDISK_NoData_Setup(uint8_t RequestNo)
 * Output         : None.
 * Return         : RESULT.
 *******************************************************************************/
-RESULT RAMDISK_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSetting)
-{
-  if (AlternateSetting > 0)
-  {
-    return USB_UNSUPPORT;/* in this application we don't have AlternateSetting*/
-  }
-  else if (Interface > 0)
-  {
-    return USB_UNSUPPORT;/*in this application we have only 1 interfaces*/
+RESULT RAMDISK_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSetting) {
+  if (AlternateSetting > 0) {
+    return USB_UNSUPPORT; /* in this application we don't have AlternateSetting*/
+  } else if (Interface > 0) {
+    return USB_UNSUPPORT; /*in this application we have only 1 interfaces*/
   }
   return USB_SUCCESS;
 }
@@ -360,9 +315,8 @@ RESULT RAMDISK_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSetting
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-uint8_t *RAMDISK_GetDeviceDescriptor(uint16_t Length)
-{
-  return Standard_GetDescriptorData(Length, Device_Descriptor );
+uint8_t *RAMDISK_GetDeviceDescriptor(uint16_t Length) {
+  return Standard_GetDescriptorData(Length, Device_Descriptor);
 }
 
 /*******************************************************************************
@@ -372,9 +326,8 @@ uint8_t *RAMDISK_GetDeviceDescriptor(uint16_t Length)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-uint8_t *RAMDISK_GetConfigDescriptor(uint16_t Length)
-{
-  return Standard_GetDescriptorData(Length, Config_Descriptor );
+uint8_t *RAMDISK_GetConfigDescriptor(uint16_t Length) {
+  return Standard_GetDescriptorData(Length, Config_Descriptor);
 }
 
 /*******************************************************************************
@@ -384,16 +337,12 @@ uint8_t *RAMDISK_GetConfigDescriptor(uint16_t Length)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-uint8_t *RAMDISK_GetStringDescriptor(uint16_t Length)
-{
+uint8_t *RAMDISK_GetStringDescriptor(uint16_t Length) {
   uint8_t wValue0 = pInformation->USBwValue0;
 
-  if (wValue0 > 5)
-  {
+  if (wValue0 > 5) {
     return NULL;
-  }
-  else
-  {
+  } else {
     return Standard_GetDescriptorData(Length, String_Descriptor[wValue0]);
   }
 }
@@ -405,16 +354,11 @@ uint8_t *RAMDISK_GetStringDescriptor(uint16_t Length)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-uint8_t *RAMDISK_Get_Max_Lun(uint16_t Length)
-{
-  if (Length == 0)
-  {
+uint8_t *RAMDISK_Get_Max_Lun(uint16_t Length) {
+  if (Length == 0) {
     pInformation->Ctrl_Info.Usb_wLength = LUN_DATA_LENGTH;
     return 0;
-  }
-  else
-  {
-    return((uint8_t*)(&RAMDISK_Max_Lun));
+  } else {
+    return ((uint8_t *)(&RAMDISK_Max_Lun));
   }
 }
-

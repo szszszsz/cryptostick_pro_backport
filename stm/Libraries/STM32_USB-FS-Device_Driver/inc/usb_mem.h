@@ -1,6 +1,7 @@
 /*
-* Author: Copyright (C) STMicroelectronics	 			
-*												MCD Application Team			Date:	04/27/2009
+* Author: Copyright (C) STMicroelectronics
+*												MCD Application
+*Team			Date:	04/27/2009
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -32,5 +33,4 @@ void PMAToUserBufferCopy(uint8_t *pbUsrBuf, uint16_t wPMABufAddr, uint16_t wNByt
 
 /* External variables --------------------------------------------------------*/
 
-#endif  /*__USB_MEM_H*/
-
+#endif /*__USB_MEM_H*/

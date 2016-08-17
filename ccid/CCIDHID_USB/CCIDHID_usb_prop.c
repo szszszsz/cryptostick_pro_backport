@@ -1,7 +1,8 @@
 /*
 * Author: Copyright (C) Rudolf Boeddeker 					Date: 2010-01-13
-*												STMicroelectronics	 			
-*												MCD Application Team			Date:	04/27/2009
+*												STMicroelectronics
+*												MCD Application
+*Team			Date:	04/27/2009
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -19,16 +20,15 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 /* Includes ------------------------------------------------------------------*/
-#include "usb_lib.h"
+#include "CCID_usb.h"
 #include "CCID_usb_conf.h"
 #include "CCID_usb_desc.h"
-#include "usb_pwr.h"
-#include "usb_bot.h"
-#include "hw_config.h"
 #include "CCID_usb_prop.h"
-#include "CCID_usb.h"
+#include "hw_config.h"
+#include "usb_bot.h"
+#include "usb_lib.h"
+#include "usb_pwr.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -36,19 +36,13 @@
 /* Private variables ---------------------------------------------------------*/
 
 extern int nFlagSendSMCardInserted;
-static uint32_t Max_Lun = 0;		// should not used
+static uint32_t Max_Lun = 0; // should not used
 
 DEVICE_INFO CCID_Device_Info;
 
-DEVICE CCID_Device_Table =
-  {
-    CCID_EP_NUM,
-    1
-  };
+DEVICE CCID_Device_Table = {CCID_EP_NUM, 1};
 
-
-DEVICE_PROP CCID_Device_Property =
-  {
+DEVICE_PROP CCID_Device_Property = {
     USB_CCID_init,
     USB_CCID_Reset,
     USB_CCID_Status_In,
@@ -56,48 +50,31 @@ DEVICE_PROP CCID_Device_Property =
     USB_CCID_Data_Setup,
     USB_CCID_NoData_Setup,
     USB_CCID_Get_Interface_Setting,
-    USB_CCID_GetDeviceDescriptor,	 //	
+    USB_CCID_GetDeviceDescriptor, //
     USB_CCID_GetConfigDescriptor,
     USB_CCID_GetStringDescriptor,
     0,
     0x40 /*MAX PACKET SIZE*/
-  };
+};
 
+USER_STANDARD_REQUESTS CCID_User_Standard_Requests = {
+    USB_CCID_Storage_GetConfiguration,   USB_CCID_Storage_SetConfiguration,
+    USB_CCID_Storage_GetInterface,       USB_CCID_Storage_SetInterface,
+    USB_CCID_Storage_GetStatus,          USB_CCID_Storage_ClearFeature,
+    USB_CCID_Storage_SetEndPointFeature, USB_CCID_Storage_SetDeviceFeature,
+    USB_CCID_Storage_SetDeviceAddress};
 
-USER_STANDARD_REQUESTS CCID_User_Standard_Requests =
-  {
-    USB_CCID_Storage_GetConfiguration,
-    USB_CCID_Storage_SetConfiguration,
-    USB_CCID_Storage_GetInterface,
-    USB_CCID_Storage_SetInterface,
-    USB_CCID_Storage_GetStatus,
-    USB_CCID_Storage_ClearFeature,
-    USB_CCID_Storage_SetEndPointFeature,
-    USB_CCID_Storage_SetDeviceFeature,
-    USB_CCID_Storage_SetDeviceAddress
-  };
+ONE_DESCRIPTOR CCID_Device_Descriptor = {(uint8_t *)CCID_DeviceDescriptor, CCID_SIZ_DEVICE_DESC};
 
-ONE_DESCRIPTOR CCID_Device_Descriptor =
-  {
-    (uint8_t*)CCID_DeviceDescriptor,
-    CCID_SIZ_DEVICE_DESC
-  };
+ONE_DESCRIPTOR CCID_Config_Descriptor = {(uint8_t *)CCID_ConfigDescriptor, CCID_SIZ_CONFIG_DESC};
 
-ONE_DESCRIPTOR CCID_Config_Descriptor =
-  {
-    (uint8_t*)CCID_ConfigDescriptor,
-    CCID_SIZ_CONFIG_DESC
-  };
-
-ONE_DESCRIPTOR CCID_String_Descriptor[5] =
-  {
-    {(uint8_t*)CCID_StringLangID,    CCID_SIZ_STRING_LANGID},
-    {(uint8_t*)CCID_StringVendor,    CCID_SIZ_STRING_VENDOR},
-    {(uint8_t*)CCID_StringProduct,   CCID_SIZ_STRING_PRODUCT},
-    {(uint8_t*)CCID_StringSerial,    CCID_SIZ_STRING_SERIAL},
-    {(uint8_t*)CCID_StringInterface, CCID_SIZ_STRING_INTERFACE},
-  };
-
+ONE_DESCRIPTOR CCID_String_Descriptor[5] = {
+    {(uint8_t *)CCID_StringLangID, CCID_SIZ_STRING_LANGID},
+    {(uint8_t *)CCID_StringVendor, CCID_SIZ_STRING_VENDOR},
+    {(uint8_t *)CCID_StringProduct, CCID_SIZ_STRING_PRODUCT},
+    {(uint8_t *)CCID_StringSerial, CCID_SIZ_STRING_SERIAL},
+    {(uint8_t *)CCID_StringInterface, CCID_SIZ_STRING_INTERFACE},
+};
 
 /* Extern variables ----------------------------------------------------------*/
 extern unsigned char Bot_State;
@@ -113,8 +90,7 @@ extern Bulk_Only_CBW CBW;
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void USB_CCID_init(void)
-{
+void USB_CCID_init(void) {
   /* Update the serial number string descriptor with the data from the unique
   ID*/
   Get_SerialNum();
@@ -141,56 +117,55 @@ void USB_CCID_init(void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void USB_CCID_Reset(void)
-{
-/* Set the device as not configured */
+void USB_CCID_Reset(void) {
+  /* Set the device as not configured */
   Device_Info->Current_Configuration = 0;
 
-/* Current Feature initialization */
+  /* Current Feature initialization */
   pInformation->Current_Feature = CCID_ConfigDescriptor[7];
 
   SetBTABLE(BTABLE_ADDRESS);
 
-/* Initialize Endpoint 0 */
+  /* Initialize Endpoint 0 */
   SetEPType(ENDP0, EP_CONTROL);
 
   SetEPTxStatus(ENDP0, EP_TX_NAK);
-  SetEPRxAddr  (ENDP0, CCID_ENDP0_RXADDR);
-  SetEPRxCount (ENDP0, Device_Property->MaxPacketSize);
-  SetEPTxAddr  (ENDP0, CCID_ENDP0_TXADDR);
+  SetEPRxAddr(ENDP0, CCID_ENDP0_RXADDR);
+  SetEPRxCount(ENDP0, Device_Property->MaxPacketSize);
+  SetEPTxAddr(ENDP0, CCID_ENDP0_TXADDR);
   Clear_Status_Out(ENDP0);
-  SetEPRxValid (ENDP0);
+  SetEPRxValid(ENDP0);
 
-/* Initialize Endpoint 1 */
-  SetEPType    (ENDP1, EP_INTERRUPT);
-  SetEPTxAddr  (ENDP1, CCID_ENDP1_TXADDR);
+  /* Initialize Endpoint 1 */
+  SetEPType(ENDP1, EP_INTERRUPT);
+  SetEPTxAddr(ENDP1, CCID_ENDP1_TXADDR);
   SetEPTxStatus(ENDP1, EP_TX_NAK);
   SetEPRxStatus(ENDP1, EP_RX_DIS);
 
-/* Initialize Endpoint 2 */
-  SetEPType    (ENDP2, EP_BULK);
+  /* Initialize Endpoint 2 */
+  SetEPType(ENDP2, EP_BULK);
 
-  SetEPRxAddr  (ENDP2, CCID_ENDP2_RXADDR);
-  SetEPRxCount (ENDP2, Device_Property->MaxPacketSize);
+  SetEPRxAddr(ENDP2, CCID_ENDP2_RXADDR);
+  SetEPRxCount(ENDP2, Device_Property->MaxPacketSize);
   SetEPRxStatus(ENDP2, EP_RX_VALID);
 
-  SetEPTxAddr  (ENDP2, CCID_ENDP2_TXADDR);
-  SetEPTxCount (ENDP2, Device_Property->MaxPacketSize);
+  SetEPTxAddr(ENDP2, CCID_ENDP2_TXADDR);
+  SetEPTxCount(ENDP2, Device_Property->MaxPacketSize);
   SetEPTxStatus(ENDP2, EP_TX_VALID);
 
-/* */
-  SetEPRxCount (ENDP0, Device_Property->MaxPacketSize);
-  SetEPRxValid (ENDP0);
+  /* */
+  SetEPRxCount(ENDP0, Device_Property->MaxPacketSize);
+  SetEPRxValid(ENDP0);
 
-/* Set the device to response on default address */
+  /* Set the device to response on default address */
   SetDeviceAddress(0);
 
   bDeviceState = ATTACHED;
 
   CBW.dSignature = BOT_CBW_SIGNATURE;
-  Bot_State      = BOT_IDLE;
+  Bot_State = BOT_IDLE;
 
-	nFlagSendSMCardInserted = TRUE;											// card is always inserted
+  nFlagSendSMCardInserted = TRUE; // card is always inserted
 }
 
 /*******************************************************************************
@@ -200,10 +175,8 @@ void USB_CCID_Reset(void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void USB_CCID_Storage_SetConfiguration(void)
-{
-  if (pInformation->Current_Configuration != 0)
-  {
+void USB_CCID_Storage_SetConfiguration(void) {
+  if (pInformation->Current_Configuration != 0) {
     /* Device configured */
     bDeviceState = CONFIGURED;
 
@@ -214,7 +187,6 @@ void USB_CCID_Storage_SetConfiguration(void)
   }
 }
 
-
 /*******************************************************************************
 * Function Name  : CCID_Storage_ClearFeature
 * Description    : Handle the ClearFeature request.
@@ -223,8 +195,7 @@ void USB_CCID_Storage_SetConfiguration(void)
 * Return         : None.
 *******************************************************************************/
 #ifdef NOT_USED
-void USB_CCID_Storage_ClearFeature(void)
-{
+void USB_CCID_Storage_ClearFeature(void) {
   /* when the host send a CBW with invalid signature or invalid length the two
      Endpoints (IN & OUT) shall stall until receiving a CCID Storage Reset     */
   if (CBW.dSignature != BOT_CBW_SIGNATURE)
@@ -239,10 +210,7 @@ void USB_CCID_Storage_ClearFeature(void)
 * Return         : None.
 *******************************************************************************/
 #ifdef NOT_USED
-void USB_CCID_Storage_SetDeviceAddress (void)
-{
-  bDeviceState = ADDRESSED;
-}
+void USB_CCID_Storage_SetDeviceAddress(void) { bDeviceState = ADDRESSED; }
 #endif
 /*******************************************************************************
 * Function Name  : CCID_Status_In
@@ -251,10 +219,7 @@ void USB_CCID_Storage_SetDeviceAddress (void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void USB_CCID_Status_In(void)
-{
-  return;
-}
+void USB_CCID_Status_In(void) { return; }
 
 /*******************************************************************************
 * Function Name  : CCID_Status_Out
@@ -263,10 +228,7 @@ void USB_CCID_Status_In(void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void USB_CCID_Status_Out(void)
-{
-  return;
-}
+void USB_CCID_Status_Out(void) { return; }
 
 /*******************************************************************************
 * Function Name  : CCID_Data_Setup.
@@ -275,9 +237,8 @@ void USB_CCID_Status_Out(void)
 * Output         : None.
 * Return         : RESULT.
 *******************************************************************************/
-RESULT USB_CCID_Data_Setup(uint8_t RequestNo)
-{
- 	return USB_UNSUPPORT; 		// not used ???
+RESULT USB_CCID_Data_Setup(uint8_t RequestNo) {
+  return USB_UNSUPPORT; // not used ???
 }
 
 /*******************************************************************************
@@ -287,10 +248,7 @@ RESULT USB_CCID_Data_Setup(uint8_t RequestNo)
 * Output         : None.
 * Return         : RESULT.
 *******************************************************************************/
-RESULT USB_CCID_NoData_Setup(uint8_t RequestNo)
-{
-  return USB_UNSUPPORT;			
-}
+RESULT USB_CCID_NoData_Setup(uint8_t RequestNo) { return USB_UNSUPPORT; }
 
 /*******************************************************************************
 * Function Name  : CCID_Get_Interface_Setting
@@ -300,15 +258,11 @@ RESULT USB_CCID_NoData_Setup(uint8_t RequestNo)
 * Output         : None.
 * Return         : RESULT.
 *******************************************************************************/
-RESULT USB_CCID_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSetting)
-{
-  if (AlternateSetting > 0)
-  {
-    return USB_UNSUPPORT;/* in this application we don't have AlternateSetting*/
-  }
-  else if (Interface > 0)
-  {
-    return USB_UNSUPPORT;/*in this application we have only 1 interfaces*/
+RESULT USB_CCID_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSetting) {
+  if (AlternateSetting > 0) {
+    return USB_UNSUPPORT; /* in this application we don't have AlternateSetting*/
+  } else if (Interface > 0) {
+    return USB_UNSUPPORT; /*in this application we have only 1 interfaces*/
   }
   return USB_SUCCESS;
 }
@@ -320,9 +274,8 @@ RESULT USB_CCID_Get_Interface_Setting(uint8_t Interface, uint8_t AlternateSettin
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-uint8_t *USB_CCID_GetDeviceDescriptor(uint16_t Length)
-{
-  return Standard_GetDescriptorData(Length, Device_Descriptor );
+uint8_t *USB_CCID_GetDeviceDescriptor(uint16_t Length) {
+  return Standard_GetDescriptorData(Length, Device_Descriptor);
 }
 
 /*******************************************************************************
@@ -332,9 +285,8 @@ uint8_t *USB_CCID_GetDeviceDescriptor(uint16_t Length)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-uint8_t *USB_CCID_GetConfigDescriptor(uint16_t Length)
-{
-  return Standard_GetDescriptorData(Length, Config_Descriptor );
+uint8_t *USB_CCID_GetConfigDescriptor(uint16_t Length) {
+  return Standard_GetDescriptorData(Length, Config_Descriptor);
 }
 
 /*******************************************************************************
@@ -344,16 +296,12 @@ uint8_t *USB_CCID_GetConfigDescriptor(uint16_t Length)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-uint8_t *USB_CCID_GetStringDescriptor(uint16_t Length)
-{
+uint8_t *USB_CCID_GetStringDescriptor(uint16_t Length) {
   uint8_t wValue0 = pInformation->USBwValue0;
 
-  if (wValue0 > 5)
-  {
+  if (wValue0 > 5) {
     return NULL;
-  }
-  else
-  {
+  } else {
     return Standard_GetDescriptorData(Length, String_Descriptor[wValue0]);
   }
 }
@@ -366,16 +314,11 @@ uint8_t *USB_CCID_GetStringDescriptor(uint16_t Length)
 * Return         : None.
 *******************************************************************************/
 
-uint8_t *USB_CCID_Get_Max_Lun(uint16_t Length)
-{
-  if (Length == 0)
-  {
-    pInformation->Ctrl_Info.Usb_wLength = 1; 			// should not used LUN_DATA_LENGTH;
+uint8_t *USB_CCID_Get_Max_Lun(uint16_t Length) {
+  if (Length == 0) {
+    pInformation->Ctrl_Info.Usb_wLength = 1; // should not used LUN_DATA_LENGTH;
     return 0;
-  }
-  else
-  {
-    return((uint8_t*)(&Max_Lun));
+  } else {
+    return ((uint8_t *)(&Max_Lun));
   }
 }
-

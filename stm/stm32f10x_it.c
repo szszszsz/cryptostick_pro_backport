@@ -1,7 +1,8 @@
 /*
 * Author: Copyright (C) Rudolf Boeddeker 					Date: 2010-01-13
-*												STMicroelectronics	 			
-*												MCD Application Team			Date:	04/27/2009
+*												STMicroelectronics
+*												MCD Application
+*Team			Date:	04/27/2009
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -21,15 +22,15 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
-#include "usb_lib.h"
-#include "usb_istr.h"
 #include "sdcard.h"
+#include "usb_istr.h"
+#include "usb_lib.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-vu32 TimingDelay  = 0;
+vu32 TimingDelay = 0;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -44,9 +45,7 @@ vu32 TimingDelay  = 0;
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void NMI_Handler(void)
-{
-}
+void NMI_Handler(void) {}
 
 /*******************************************************************************
 * Function Name  : HardFault_Handler
@@ -55,11 +54,9 @@ void NMI_Handler(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void HardFault_Handler(void)
-{
+void HardFault_Handler(void) {
   /* Go to infinite loop when Hard Fault exception occurs */
-  while (1)
-  {
+  while (1) {
   }
 }
 
@@ -70,11 +67,9 @@ void HardFault_Handler(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void MemManage_Handler(void)
-{
+void MemManage_Handler(void) {
   /* Go to infinite loop when Memory Manage exception occurs */
-  while (1)
-  {
+  while (1) {
   }
 }
 
@@ -85,11 +80,9 @@ void MemManage_Handler(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void BusFault_Handler(void)
-{
+void BusFault_Handler(void) {
   /* Go to infinite loop when Bus Fault exception occurs */
-  while (1)
-  {
+  while (1) {
   }
 }
 
@@ -100,11 +93,9 @@ void BusFault_Handler(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void UsageFault_Handler(void)
-{
+void UsageFault_Handler(void) {
   /* Go to infinite loop when Usage Fault exception occurs */
-  while (1)
-  {
+  while (1) {
   }
 }
 
@@ -115,9 +106,7 @@ void UsageFault_Handler(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void SVC_Handler(void)
-{
-}
+void SVC_Handler(void) {}
 
 /*******************************************************************************
 * Function Name  : DebugMon_Handler
@@ -126,9 +115,7 @@ void SVC_Handler(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void DebugMon_Handler(void)
-{
-}
+void DebugMon_Handler(void) {}
 
 /*******************************************************************************
 * Function Name  : PendSV_Handler
@@ -137,9 +124,7 @@ void DebugMon_Handler(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void PendSV_Handler(void)
-{
-}
+void PendSV_Handler(void) {}
 
 /*******************************************************************************
 * Function Name  : SysTick_Handler
@@ -148,11 +133,9 @@ void PendSV_Handler(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void SysTick_Handler(void)
-{
+void SysTick_Handler(void) {
   /* Decrement the TimingDelay variable */
-  if (TimingDelay != 0x00)
-  {
+  if (TimingDelay != 0x00) {
     TimingDelay--;
   }
 }
@@ -169,10 +152,7 @@ void SysTick_Handler(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void USB_HP_CAN1_TX_IRQHandler(void)
-{
-  CTR_HP();
-}
+void USB_HP_CAN1_TX_IRQHandler(void) { CTR_HP(); }
 
 /*******************************************************************************
 * Function Name  : USB_LP_CAN1_RX0_IRQHandler
@@ -182,10 +162,7 @@ void USB_HP_CAN1_TX_IRQHandler(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void USB_LP_CAN1_RX0_IRQHandler(void)
-{
-  USB_Istr();
-}
+void USB_LP_CAN1_RX0_IRQHandler(void) { USB_Istr(); }
 
 /*******************************************************************************
 * Function Name  : SDIO_IRQHandler
@@ -194,11 +171,9 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void SDIO_IRQHandler(void)
-{ 
+void SDIO_IRQHandler(void) {
   /* Process All SDIO Interrupt Sources */
   SD_ProcessIRQSrc();
-  
 }
 /******************************************************************************/
 /*                 STM32F10x Peripherals Interrupt Handlers                   */
@@ -217,4 +192,3 @@ void SDIO_IRQHandler(void)
 /*void PPP_IRQHandler(void)
 {
 }*/
-

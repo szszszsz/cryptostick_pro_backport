@@ -18,19 +18,19 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform_config.h"
-#include "string.h"
 #include "ramdisk.h"
 #include "AccessInterface.h"
 #include "fat12.h"
+#include "platform_config.h"
+#include "string.h"
 
-#define RAMDISK_START_IN_MEM				((uint32_t)(0x20000000 + 0x4000))	 // 0xa000 Check build config and ram chip size
-#define RAMDISK_SIZE								((uint32_t) 0x1000)
-#define RAMDISK_BLOCK_SIZE          ((uint16_t) 0x0200) /* 512 bytes per block */
-#define RAMDISK_MAX_BLOCK           ((uint16_t)(RAMDISK_SIZE / RAMDISK_BLOCK_SIZE)) 
+#define RAMDISK_START_IN_MEM                                                                       \
+  ((uint32_t)(0x20000000 + 0x4000)) // 0xa000 Check build config and ram chip size
+#define RAMDISK_SIZE ((uint32_t)0x1000)
+#define RAMDISK_BLOCK_SIZE ((uint16_t)0x0200) /* 512 bytes per block */
+#define RAMDISK_MAX_BLOCK ((uint16_t)(RAMDISK_SIZE / RAMDISK_BLOCK_SIZE))
 
-char *RamdiskStart = (char*)RAMDISK_START_IN_MEM;
-
+char *RamdiskStart = (char *)RAMDISK_START_IN_MEM;
 
 /*******************************************************************************
 
@@ -38,13 +38,12 @@ char *RamdiskStart = (char*)RAMDISK_START_IN_MEM;
 
 *******************************************************************************/
 
-uint16_t RamdiskInit (void)
-{
-	RamdiskStart = (char*)RAMDISK_START_IN_MEM;
+uint16_t RamdiskInit(void) {
+  RamdiskStart = (char *)RAMDISK_START_IN_MEM;
 
-	CreateFilesystem (RamdiskStart);
+  CreateFilesystem(RamdiskStart);
 
-	return (TRUE);
+  return (TRUE);
 }
 
 /*******************************************************************************
@@ -53,20 +52,18 @@ uint16_t RamdiskInit (void)
 
 *******************************************************************************/
 
-uint16_t RamdiskWrite (uint32_t Memory_Offset, uint32_t *Writebuff, uint16_t Transfer_Length)
-{
-	char *WB = (char*)Writebuff;
-	int i;
-	int n;
+uint16_t RamdiskWrite(uint32_t Memory_Offset, uint32_t *Writebuff, uint16_t Transfer_Length) {
+  char *WB = (char *)Writebuff;
+  int i;
+  int n;
 
-	n = Transfer_Length;
+  n = Transfer_Length;
 
-	for (i=0;i<n;i++)
-	{
-		RamdiskStart[Memory_Offset+i] = WB[i]; 	
-	}
-//		memcpy (&RamdiskStart[Memory_Offset],Writebuff,Transfer_Length);
-	return (TRUE);
+  for (i = 0; i < n; i++) {
+    RamdiskStart[Memory_Offset + i] = WB[i];
+  }
+  //		memcpy (&RamdiskStart[Memory_Offset],Writebuff,Transfer_Length);
+  return (TRUE);
 }
 
 /*******************************************************************************
@@ -75,24 +72,18 @@ uint16_t RamdiskWrite (uint32_t Memory_Offset, uint32_t *Writebuff, uint16_t Tra
 
 *******************************************************************************/
 
-uint16_t RamdiskRead (uint32_t Memory_Offset, uint32_t *Readbuff, uint16_t Transfer_Length)
-{
-	char *WB = (char*)Readbuff;
-	int i;
-	int n;
+uint16_t RamdiskRead(uint32_t Memory_Offset, uint32_t *Readbuff, uint16_t Transfer_Length) {
+  char *WB = (char *)Readbuff;
+  int i;
+  int n;
 
-	n = Transfer_Length;
+  n = Transfer_Length;
 
-	for (i=0;i<n;i++)
-	{
-		WB[i] = RamdiskStart[Memory_Offset+i]; 	
-	}
+  for (i = 0; i < n; i++) {
+    WB[i] = RamdiskStart[Memory_Offset + i];
+  }
 
-//	memcpy (Readbuff,&RamdiskStart[Memory_Offset],Transfer_Length);
+  //	memcpy (Readbuff,&RamdiskStart[Memory_Offset],Transfer_Length);
 
-	return (TRUE);
+  return (TRUE);
 }
-
-
-
-

@@ -1,7 +1,8 @@
 /*
 * Author: Copyright (C) Rudolf Boeddeker 					Date: 2010-01-13
-*												STMicroelectronics	 			
-*												MCD Application Team			Date:	04/27/2009
+*												STMicroelectronics
+*												MCD Application
+*Team			Date:	04/27/2009
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -26,9 +27,9 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Select MSD Card: ChipSelect pin low  */
-#define MSD_CS_LOW()     GPIO_ResetBits(GPIOC, GPIO_Pin_12)
+#define MSD_CS_LOW() GPIO_ResetBits(GPIOC, GPIO_Pin_12)
 /* Deselect MSD Card: ChipSelect pin high */
-#define MSD_CS_HIGH()    GPIO_SetBits(GPIOC, GPIO_Pin_12)
+#define MSD_CS_HIGH() GPIO_SetBits(GPIOC, GPIO_Pin_12)
 
 /* Private function prototypes -----------------------------------------------*/
 static void SPI_Config(void);
@@ -42,8 +43,7 @@ static void SPI_Config(void);
 * Return         : The MSD Response: - MSD_RESPONSE_FAILURE: Sequence failed
 *                                    - MSD_RESPONSE_NO_ERROR: Sequence succeed
 *******************************************************************************/
-uint8_t MSD_Init(void)
-{
+uint8_t MSD_Init(void) {
   uint32_t i = 0;
 
   /* Initialize SPI1 */
@@ -52,8 +52,7 @@ uint8_t MSD_Init(void)
   MSD_CS_HIGH();
   /* Send dummy byte 0xFF, 10 times with CS high*/
   /* rise CS and MOSI for 80 clocks cycles */
-  for (i = 0; i <= 9; i++)
-  {
+  for (i = 0; i <= 9; i++) {
     /* Send dummy byte 0xFF */
     MSD_WriteByte(DUMMY);
   }
@@ -73,8 +72,7 @@ uint8_t MSD_Init(void)
 * Return         : The MSD Response: - MSD_RESPONSE_FAILURE: Sequence failed
 *                                    - MSD_RESPONSE_NO_ERROR: Sequence succeed
 *******************************************************************************/
-uint8_t MSD_WriteBlock(uint8_t* pBuffer, uint32_t WriteAddr, uint16_t NumByteToWrite)
-{
+uint8_t MSD_WriteBlock(uint8_t *pBuffer, uint32_t WriteAddr, uint16_t NumByteToWrite) {
   uint32_t i = 0;
   uint8_t rvalue = MSD_RESPONSE_FAILURE;
 
@@ -84,15 +82,13 @@ uint8_t MSD_WriteBlock(uint8_t* pBuffer, uint32_t WriteAddr, uint16_t NumByteToW
   MSD_SendCmd(MSD_WRITE_BLOCK, WriteAddr, 0xFF);
 
   /* Check if the MSD acknowledged the write block command: R1 response (0x00: no errors) */
-  if (!MSD_GetResponse(MSD_RESPONSE_NO_ERROR))
-  {
+  if (!MSD_GetResponse(MSD_RESPONSE_NO_ERROR)) {
     /* Send a dummy byte */
     MSD_WriteByte(DUMMY);
     /* Send the data token to signify the start of the data */
     MSD_WriteByte(0xFE);
     /* Write the block data to MSD : write count data by block */
-    for (i = 0; i < NumByteToWrite; i++)
-    {
+    for (i = 0; i < NumByteToWrite; i++) {
       /* Send the pointed byte */
       MSD_WriteByte(*pBuffer);
       /* Point to the next location where the byte read will be saved */
@@ -102,8 +98,7 @@ uint8_t MSD_WriteBlock(uint8_t* pBuffer, uint32_t WriteAddr, uint16_t NumByteToW
     MSD_ReadByte();
     MSD_ReadByte();
     /* Read data response */
-    if (MSD_GetDataResponse() == MSD_DATA_OK)
-    {
+    if (MSD_GetDataResponse() == MSD_DATA_OK) {
       rvalue = MSD_RESPONSE_NO_ERROR;
     }
   }
@@ -127,8 +122,7 @@ uint8_t MSD_WriteBlock(uint8_t* pBuffer, uint32_t WriteAddr, uint16_t NumByteToW
 * Return         : The MSD Response: - MSD_RESPONSE_FAILURE: Sequence failed
 *                                    - MSD_RESPONSE_NO_ERROR: Sequence succeed
 *******************************************************************************/
-uint8_t MSD_ReadBlock(uint8_t* pBuffer, uint32_t ReadAddr, uint16_t NumByteToRead)
-{
+uint8_t MSD_ReadBlock(uint8_t *pBuffer, uint32_t ReadAddr, uint16_t NumByteToRead) {
   uint32_t i = 0;
   uint8_t rvalue = MSD_RESPONSE_FAILURE;
 
@@ -138,14 +132,11 @@ uint8_t MSD_ReadBlock(uint8_t* pBuffer, uint32_t ReadAddr, uint16_t NumByteToRea
   MSD_SendCmd(MSD_READ_SINGLE_BLOCK, ReadAddr, 0xFF);
 
   /* Check if the MSD acknowledged the read block command: R1 response (0x00: no errors) */
-  if (!MSD_GetResponse(MSD_RESPONSE_NO_ERROR))
-  {
+  if (!MSD_GetResponse(MSD_RESPONSE_NO_ERROR)) {
     /* Now look for the data token to signify the start of the data */
-    if (!MSD_GetResponse(MSD_START_DATA_SINGLE_BLOCK_READ))
-    {
+    if (!MSD_GetResponse(MSD_START_DATA_SINGLE_BLOCK_READ)) {
       /* Read the MSD block data : read NumByteToRead data */
-      for (i = 0; i < NumByteToRead; i++)
-      {
+      for (i = 0; i < NumByteToRead; i++) {
         /* Save the received data */
         *pBuffer = MSD_ReadByte();
         /* Point to the next location where the byte read will be saved */
@@ -178,8 +169,7 @@ uint8_t MSD_ReadBlock(uint8_t* pBuffer, uint32_t ReadAddr, uint16_t NumByteToRea
 * Return         : The MSD Response: - MSD_RESPONSE_FAILURE: Sequence failed
 *                                    - MSD_RESPONSE_NO_ERROR: Sequence succeed
 *******************************************************************************/
-uint8_t MSD_WriteBuffer(uint8_t* pBuffer, uint32_t WriteAddr, uint32_t NumByteToWrite)
-{
+uint8_t MSD_WriteBuffer(uint8_t *pBuffer, uint32_t WriteAddr, uint32_t NumByteToWrite) {
   uint32_t i = 0, NbrOfBlock = 0, Offset = 0;
   uint8_t rvalue = MSD_RESPONSE_FAILURE;
 
@@ -189,14 +179,12 @@ uint8_t MSD_WriteBuffer(uint8_t* pBuffer, uint32_t WriteAddr, uint32_t NumByteTo
   MSD_CS_LOW();
 
   /* Data transfer */
-  while (NbrOfBlock --)
-  {
+  while (NbrOfBlock--) {
     /* Send CMD24 (MSD_WRITE_BLOCK) to write blocks */
     MSD_SendCmd(MSD_WRITE_BLOCK, WriteAddr + Offset, 0xFF);
 
     /* Check if the MSD acknowledged the write block command: R1 response (0x00: no errors) */
-    if (MSD_GetResponse(MSD_RESPONSE_NO_ERROR))
-    {
+    if (MSD_GetResponse(MSD_RESPONSE_NO_ERROR)) {
       return MSD_RESPONSE_FAILURE;
     }
     /* Send dummy byte */
@@ -204,8 +192,7 @@ uint8_t MSD_WriteBuffer(uint8_t* pBuffer, uint32_t WriteAddr, uint32_t NumByteTo
     /* Send the data token to signify the start of the data */
     MSD_WriteByte(MSD_START_DATA_SINGLE_BLOCK_WRITE);
     /* Write the block data to MSD : write count data by block */
-    for (i = 0; i < BLOCK_SIZE; i++)
-    {
+    for (i = 0; i < BLOCK_SIZE; i++) {
       /* Send the pointed byte */
       MSD_WriteByte(*pBuffer);
       /* Point to the next location where the byte read will be saved */
@@ -217,13 +204,10 @@ uint8_t MSD_WriteBuffer(uint8_t* pBuffer, uint32_t WriteAddr, uint32_t NumByteTo
     MSD_ReadByte();
     MSD_ReadByte();
     /* Read data response */
-    if (MSD_GetDataResponse() == MSD_DATA_OK)
-    {
+    if (MSD_GetDataResponse() == MSD_DATA_OK) {
       /* Set response value to success */
       rvalue = MSD_RESPONSE_NO_ERROR;
-    }
-    else
-    {
+    } else {
       /* Set response value to failure */
       rvalue = MSD_RESPONSE_FAILURE;
     }
@@ -248,8 +232,7 @@ uint8_t MSD_WriteBuffer(uint8_t* pBuffer, uint32_t WriteAddr, uint32_t NumByteTo
 * Return         : The MSD Response: - MSD_RESPONSE_FAILURE: Sequence failed
 *                                    - MSD_RESPONSE_NO_ERROR: Sequence succeed
 *******************************************************************************/
-uint8_t MSD_ReadBuffer(uint8_t* pBuffer, uint32_t ReadAddr, uint32_t NumByteToRead)
-{
+uint8_t MSD_ReadBuffer(uint8_t *pBuffer, uint32_t ReadAddr, uint32_t NumByteToRead) {
   uint32_t i = 0, NbrOfBlock = 0, Offset = 0;
   uint8_t rvalue = MSD_RESPONSE_FAILURE;
 
@@ -259,21 +242,17 @@ uint8_t MSD_ReadBuffer(uint8_t* pBuffer, uint32_t ReadAddr, uint32_t NumByteToRe
   MSD_CS_LOW();
 
   /* Data transfer */
-  while (NbrOfBlock --)
-  {
+  while (NbrOfBlock--) {
     /* Send CMD17 (MSD_READ_SINGLE_BLOCK) to read one block */
-    MSD_SendCmd (MSD_READ_SINGLE_BLOCK, ReadAddr + Offset, 0xFF);
+    MSD_SendCmd(MSD_READ_SINGLE_BLOCK, ReadAddr + Offset, 0xFF);
     /* Check if the MSD acknowledged the read block command: R1 response (0x00: no errors) */
-    if (MSD_GetResponse(MSD_RESPONSE_NO_ERROR))
-    {
-      return  MSD_RESPONSE_FAILURE;
+    if (MSD_GetResponse(MSD_RESPONSE_NO_ERROR)) {
+      return MSD_RESPONSE_FAILURE;
     }
     /* Now look for the data token to signify the start of the data */
-    if (!MSD_GetResponse(MSD_START_DATA_SINGLE_BLOCK_READ))
-    {
+    if (!MSD_GetResponse(MSD_START_DATA_SINGLE_BLOCK_READ)) {
       /* Read the MSD block data : read NumByteToRead data */
-      for (i = 0; i < BLOCK_SIZE; i++)
-      {
+      for (i = 0; i < BLOCK_SIZE; i++) {
         /* Read the pointed data */
         *pBuffer = MSD_ReadByte();
         /* Point to the next location where the byte read will be saved */
@@ -286,9 +265,7 @@ uint8_t MSD_ReadBuffer(uint8_t* pBuffer, uint32_t ReadAddr, uint32_t NumByteToRe
       MSD_ReadByte();
       /* Set response value to success */
       rvalue = MSD_RESPONSE_NO_ERROR;
-    }
-    else
-    {
+    } else {
       /* Set response value to failure */
       rvalue = MSD_RESPONSE_FAILURE;
     }
@@ -312,8 +289,7 @@ uint8_t MSD_ReadBuffer(uint8_t* pBuffer, uint32_t ReadAddr, uint32_t NumByteToRe
 * Return         : The MSD Response: - MSD_RESPONSE_FAILURE: Sequence failed
 *                                    - MSD_RESPONSE_NO_ERROR: Sequence succeed
 *******************************************************************************/
-uint8_t MSD_GetCSDRegister(sMSD_CSD* MSD_csd)
-{
+uint8_t MSD_GetCSDRegister(sMSD_CSD *MSD_csd) {
   uint32_t i = 0;
   uint8_t rvalue = MSD_RESPONSE_FAILURE;
   uint8_t CSD_Tab[16];
@@ -324,12 +300,9 @@ uint8_t MSD_GetCSDRegister(sMSD_CSD* MSD_csd)
   MSD_SendCmd(MSD_SEND_CSD, 0, 0xFF);
 
   /* Wait for response in the R1 format (0x00 is no errors) */
-  if (!MSD_GetResponse(MSD_RESPONSE_NO_ERROR))
-  {
-    if (!MSD_GetResponse(MSD_START_DATA_SINGLE_BLOCK_READ))
-    {
-      for (i = 0; i < 16; i++)
-      {
+  if (!MSD_GetResponse(MSD_RESPONSE_NO_ERROR)) {
+    if (!MSD_GetResponse(MSD_START_DATA_SINGLE_BLOCK_READ)) {
+      for (i = 0; i < 16; i++) {
         /* Store CSD register value on CSD_Tab */
         CSD_Tab[i] = MSD_ReadByte();
       }
@@ -351,7 +324,7 @@ uint8_t MSD_GetCSDRegister(sMSD_CSD* MSD_csd)
   MSD_csd->SysSpecVersion = (CSD_Tab[0] & 0x3C) >> 2;
   MSD_csd->Reserved1 = CSD_Tab[0] & 0x03;
   /* Byte 1 */
-  MSD_csd->TAAC = CSD_Tab[1] ;
+  MSD_csd->TAAC = CSD_Tab[1];
   /* Byte 2 */
   MSD_csd->NSAC = CSD_Tab[2];
   /* Byte 3 */
@@ -420,8 +393,7 @@ uint8_t MSD_GetCSDRegister(sMSD_CSD* MSD_csd)
 * Return         : The MSD Response: - MSD_RESPONSE_FAILURE: Sequence failed
 *                                    - MSD_RESPONSE_NO_ERROR: Sequence succeed
 *******************************************************************************/
-uint8_t MSD_GetCIDRegister(sMSD_CID* MSD_cid)
-{
+uint8_t MSD_GetCIDRegister(sMSD_CID *MSD_cid) {
   uint32_t i = 0;
   uint8_t rvalue = MSD_RESPONSE_FAILURE;
   uint8_t CID_Tab[16];
@@ -432,13 +404,10 @@ uint8_t MSD_GetCIDRegister(sMSD_CID* MSD_cid)
   MSD_SendCmd(MSD_SEND_CID, 0, 0xFF);
 
   /* Wait for response in the R1 format (0x00 is no errors) */
-  if (!MSD_GetResponse(MSD_RESPONSE_NO_ERROR))
-  {
-    if (!MSD_GetResponse(MSD_START_DATA_SINGLE_BLOCK_READ))
-    {
+  if (!MSD_GetResponse(MSD_RESPONSE_NO_ERROR)) {
+    if (!MSD_GetResponse(MSD_START_DATA_SINGLE_BLOCK_READ)) {
       /* Store CID register value on CID_Tab */
-      for (i = 0; i < 16; i++)
-      {
+      for (i = 0; i < 16; i++) {
         CID_Tab[i] = MSD_ReadByte();
       }
     }
@@ -503,8 +472,7 @@ uint8_t MSD_GetCIDRegister(sMSD_CID* MSD_cid)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void MSD_SendCmd(uint8_t Cmd, uint32_t Arg, uint8_t Crc)
-{
+void MSD_SendCmd(uint8_t Cmd, uint32_t Arg, uint8_t Crc) {
   uint32_t i = 0x00;
   uint8_t Frame[6];
 
@@ -522,8 +490,7 @@ void MSD_SendCmd(uint8_t Cmd, uint32_t Arg, uint8_t Crc)
   Frame[5] = (Crc);
 
   /* Send the Cmd bytes */
-  for (i = 0; i < 6; i++)
-  {
+  for (i = 0; i < 6; i++) {
     MSD_WriteByte(Frame[i]);
   }
 }
@@ -539,37 +506,32 @@ void MSD_SendCmd(uint8_t Cmd, uint32_t Arg, uint8_t Crc)
 *                   - status 110: Data rejected due to a Write error.
 *                   - status 111: Data rejected due to other error.
 *******************************************************************************/
-uint8_t MSD_GetDataResponse(void)
-{
+uint8_t MSD_GetDataResponse(void) {
   uint32_t i = 0;
   uint8_t response, rvalue;
 
-  while (i <= 64)
-  {
+  while (i <= 64) {
     /* Read resonse */
     response = MSD_ReadByte();
     /* Mask unused bits */
     response &= 0x1F;
 
-    switch (response)
-    {
-      case MSD_DATA_OK:
-      {
-        rvalue = MSD_DATA_OK;
-        break;
-      }
+    switch (response) {
+    case MSD_DATA_OK: {
+      rvalue = MSD_DATA_OK;
+      break;
+    }
 
-      case MSD_DATA_CRC_ERROR:
-        return MSD_DATA_CRC_ERROR;
+    case MSD_DATA_CRC_ERROR:
+      return MSD_DATA_CRC_ERROR;
 
-      case MSD_DATA_WRITE_ERROR:
-        return MSD_DATA_WRITE_ERROR;
+    case MSD_DATA_WRITE_ERROR:
+      return MSD_DATA_WRITE_ERROR;
 
-      default:
-      {
-        rvalue = MSD_DATA_OTHER_ERROR;
-        break;
-      }
+    default: {
+      rvalue = MSD_DATA_OTHER_ERROR;
+      break;
+    }
     }
     /* Exit loop in case of data ok */
     if (rvalue == MSD_DATA_OK)
@@ -578,7 +540,8 @@ uint8_t MSD_GetDataResponse(void)
     i++;
   }
   /* Wait null data */
-  while (MSD_ReadByte() == 0);
+  while (MSD_ReadByte() == 0)
+    ;
   /* Return response */
   return response;
 }
@@ -591,23 +554,18 @@ uint8_t MSD_GetDataResponse(void)
 * Return         : The MSD Response: - MSD_RESPONSE_FAILURE: Sequence failed
 *                                    - MSD_RESPONSE_NO_ERROR: Sequence succeed
 *******************************************************************************/
-uint8_t MSD_GetResponse(uint8_t Response)
-{
+uint8_t MSD_GetResponse(uint8_t Response) {
   uint32_t Count = 0xFFF;
 
   /* Check if response is got or a timeout is happen */
-  while ((MSD_ReadByte() != Response) && Count)
-  {
+  while ((MSD_ReadByte() != Response) && Count) {
     Count--;
   }
 
-  if (Count == 0)
-  {
+  if (Count == 0) {
     /* After time out */
     return MSD_RESPONSE_FAILURE;
-  }
-  else
-  {
+  } else {
     /* Right response got */
     return MSD_RESPONSE_NO_ERROR;
   }
@@ -620,8 +578,7 @@ uint8_t MSD_GetResponse(uint8_t Response)
 * Output         : None
 * Return         : The MSD status.
 *******************************************************************************/
-uint16_t MSD_GetStatus(void)
-{
+uint16_t MSD_GetStatus(void) {
   uint16_t Status = 0;
 
   /* MSD chip select low */
@@ -648,22 +605,19 @@ uint16_t MSD_GetStatus(void)
 * Return         : The MSD Response: - MSD_RESPONSE_FAILURE: Sequence failed
 *                                    - MSD_RESPONSE_NO_ERROR: Sequence succeed
 *******************************************************************************/
-uint8_t MSD_GoIdleState(void)
-{
+uint8_t MSD_GoIdleState(void) {
   /* MSD chip select low */
   MSD_CS_LOW();
   /* Send CMD0 (GO_IDLE_STATE) to put MSD in SPI mode */
   MSD_SendCmd(MSD_GO_IDLE_STATE, 0, 0x95);
 
   /* Wait for In Idle State Response (R1 Format) equal to 0x01 */
-  if (MSD_GetResponse(MSD_IN_IDLE_STATE))
-  {
+  if (MSD_GetResponse(MSD_IN_IDLE_STATE)) {
     /* No Idle State Response: return response failue */
     return MSD_RESPONSE_FAILURE;
   }
   /*----------Activates the card initialization process-----------*/
-  do
-  {
+  do {
     /* MSD chip select high */
     MSD_CS_HIGH();
     /* Send Dummy byte 0xFF */
@@ -675,8 +629,7 @@ uint8_t MSD_GoIdleState(void)
     /* Send CMD1 (Activates the card process) until response equal to 0x0 */
     MSD_SendCmd(MSD_SEND_OP_COND, 0, 0xFF);
     /* Wait for no error Response (R1 Format) equal to 0x00 */
-  }
-  while (MSD_GetResponse(MSD_RESPONSE_NO_ERROR));
+  } while (MSD_GetResponse(MSD_RESPONSE_NO_ERROR));
 
   /* MSD chip select high */
   MSD_CS_HIGH();
@@ -693,10 +646,10 @@ uint8_t MSD_GoIdleState(void)
 * Output         : None
 * Return         : None.
 *******************************************************************************/
-void MSD_WriteByte(uint8_t Data)
-{
+void MSD_WriteByte(uint8_t Data) {
   /* Wait until the transmit buffer is empty */
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET)
+    ;
   /* Send the byte */
   SPI_I2S_SendData(SPI1, Data);
 }
@@ -708,17 +661,18 @@ void MSD_WriteByte(uint8_t Data)
 * Output         : None
 * Return         : The received byte.
 *******************************************************************************/
-uint8_t MSD_ReadByte(void)
-{
+uint8_t MSD_ReadByte(void) {
   uint8_t Data = 0;
 
   /* Wait until the transmit buffer is empty */
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET)
+    ;
   /* Send the byte */
   SPI_I2S_SendData(SPI1, DUMMY);
 
   /* Wait until a data is received */
-  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
+  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET)
+    ;
   /* Get the received data */
   Data = SPI_I2S_ReceiveData(SPI1);
 
@@ -733,13 +687,12 @@ uint8_t MSD_ReadByte(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void SPI_Config(void)
-{
-  GPIO_InitTypeDef  GPIO_InitStructure;
-  SPI_InitTypeDef   SPI_InitStructure;
+void SPI_Config(void) {
+  GPIO_InitTypeDef GPIO_InitStructure;
+  SPI_InitTypeDef SPI_InitStructure;
 
   /* GPIOA and GPIOC Periph clock enable */
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);			// for CryptoStick
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE); // for CryptoStick
   /* SPI1 Periph clock enable */
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
 
@@ -749,11 +702,11 @@ void SPI_Config(void)
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
   GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-/* Configure PC12 pin: CS pin */
-  GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_4;								// for CryptoStick
+  /* Configure PC12 pin: CS pin */
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4; // for CryptoStick
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;
-  GPIO_Init(GPIOA, &GPIO_InitStructure);										// for CryptoStick
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_Init(GPIOA, &GPIO_InitStructure); // for CryptoStick
 
   /* SPI1 Config */
   SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;

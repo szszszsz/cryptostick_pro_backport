@@ -17,23 +17,19 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef __ACCESSINTERFACE_H_
+#define __ACCESSINTERFACE_H_
 
-#ifndef __ACCESSINTERFACE_H_ 
-#define __ACCESSINTERFACE_H_ 
+int USB_SwitchUSBDevice(int nNewUSBDev);
+int USB_Reconnect(void);
+short SetRAMFileText(u16 nPos, char *szText);
+short SetFileHeader(void);
+short SetInputLine(short nFilePos, short *nInputCharPos);
+char WaitForInputChar(short nInputCharPos);
+short ShowHelp(short nFilePos);
+short PrintPasswordMatrix(short nFilePos);
 
-int USB_SwitchUSBDevice (int nNewUSBDev);
-int USB_Reconnect (void);
-short SetRAMFileText (u16 nPos, char *szText);
-short SetFileHeader (void);
-short SetInputLine (short nFilePos,short *nInputCharPos);
-char WaitForInputChar (short nInputCharPos);
-short ShowHelp (short  nFilePos);
-short PrintPasswordMatrix (short nFilePos);
-
-int ValidateUSBAccess (void);
-int RamDiskUserInterface (void);
+int ValidateUSBAccess(void);
+int RamDiskUserInterface(void);
 
 #endif /* __ACCESSINTERFACE_H_ */
-
-
-

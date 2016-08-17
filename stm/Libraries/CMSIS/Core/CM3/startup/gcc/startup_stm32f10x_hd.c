@@ -4,7 +4,7 @@
  * @author    MCD Application Team
  * @version   V3.0.0
  * @date      04/06/2009
- * @brief     STM32F10x High Density Devices vector table for RIDE7 toolchain. 
+ * @brief     STM32F10x High Density Devices vector table for RIDE7 toolchain.
  *            This module performs:
  *                - Set the initial SP
  *                - Set the initial PC == Reset_Handler,
@@ -31,29 +31,29 @@
 /* Includes ------------------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define WEAK __attribute__ ((weak))
-#define Initial_spTop      0x20000400
+#define WEAK __attribute__((weak))
+#define Initial_spTop 0x20000400
 
 /* Private macro -------------------------------------------------------------*/
 extern unsigned long _etext;
-/* start address for the initialization values of the .data section. 
+/* start address for the initialization values of the .data section.
 defined in linker script */
 extern unsigned long _sidata;
 
-/* start address for the .data section. defined in linker script */    
+/* start address for the .data section. defined in linker script */
 extern unsigned long _sdata;
 
-/* end address for the .data section. defined in linker script */    
+/* end address for the .data section. defined in linker script */
 extern unsigned long _edata;
-    
+
 /* start address for the .bss section. defined in linker script */
 extern unsigned long _sbss;
 
-/* end address for the .bss section. defined in linker script */      
-extern unsigned long _ebss;  
-    
+/* end address for the .bss section. defined in linker script */
+extern unsigned long _ebss;
+
 /* init value for the stack pointer. defined in linker script */
-extern void _estack;  
+extern void _estack;
 
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -139,7 +139,7 @@ void WEAK DMA2_Channel1_IRQHandler(void);
 void WEAK DMA2_Channel2_IRQHandler(void);
 void WEAK DMA2_Channel3_IRQHandler(void);
 void WEAK DMA2_Channel4_5_IRQHandler(void);
-void WEAK SystemInit_ExtMemCtl(void); 
+void WEAK SystemInit_ExtMemCtl(void);
 
 /* Private functions ---------------------------------------------------------*/
 /******************************************************************************
@@ -150,25 +150,23 @@ void WEAK SystemInit_ExtMemCtl(void);
 *
 ******************************************************************************/
 
-__attribute__ ((section(".isr_vector")))
-void (* const g_pfnVectors[])(void) =
-{       
-    (void *)Initial_spTop,      /* The initial stack pointer */
-    Reset_Handler,              /* Reset Handler */
-    NMI_Handler,                /* NMI Handler */
-    HardFault_Handler,          /* Hard Fault Handler */
-    MemManage_Handler,          /* MPU Fault Handler */
-    BusFault_Handler,           /* Bus Fault Handler */
-    UsageFault_Handler,         /* Usage Fault Handler */
-    0,                          /* Reserved */
-    0,                          /* Reserved */
-    0,                          /* Reserved */
-    0,                          /* Reserved */
-    SVC_Handler,                /* SVCall Handler */
-    DebugMon_Handler,           /* Debug Monitor Handler */
-    0,                          /* Reserved */
-    PendSV_Handler,             /* PendSV Handler */
-    SysTick_Handler,            /* SysTick Handler */
+__attribute__((section(".isr_vector"))) void (*const g_pfnVectors[])(void) = {
+    (void *)Initial_spTop, /* The initial stack pointer */
+    Reset_Handler,         /* Reset Handler */
+    NMI_Handler,           /* NMI Handler */
+    HardFault_Handler,     /* Hard Fault Handler */
+    MemManage_Handler,     /* MPU Fault Handler */
+    BusFault_Handler,      /* Bus Fault Handler */
+    UsageFault_Handler,    /* Usage Fault Handler */
+    0,                     /* Reserved */
+    0,                     /* Reserved */
+    0,                     /* Reserved */
+    0,                     /* Reserved */
+    SVC_Handler,           /* SVCall Handler */
+    DebugMon_Handler,      /* Debug Monitor Handler */
+    0,                     /* Reserved */
+    PendSV_Handler,        /* PendSV Handler */
+    SysTick_Handler,       /* SysTick Handler */
 
     /* External Interrupts */
     WWDG_IRQHandler,            /* Window Watchdog */
@@ -213,7 +211,7 @@ void (* const g_pfnVectors[])(void) =
     USART3_IRQHandler,          /* USART3 */
     EXTI15_10_IRQHandler,       /* EXTI Line 15..10 */
     RTCAlarm_IRQHandler,        /* RTC Alarm through EXTI Line */
-    USBWakeUp_IRQHandler,       /* USB Wakeup from suspend */  
+    USBWakeUp_IRQHandler,       /* USB Wakeup from suspend */
     TIM8_BRK_IRQHandler,        /* TIM8 Break */
     TIM8_UP_IRQHandler,         /* TIM8 Update */
     TIM8_TRG_COM_IRQHandler,    /* TIM8 Trigger and Commutation */
@@ -223,21 +221,21 @@ void (* const g_pfnVectors[])(void) =
     SDIO_IRQHandler,            /* SDIO */
     TIM5_IRQHandler,            /* TIM5 */
     SPI3_IRQHandler,            /* SPI3 */
-    UART4_IRQHandler,           /* UART4 */ 
+    UART4_IRQHandler,           /* UART4 */
     UART5_IRQHandler,           /* UART5 */
-    TIM6_IRQHandler,            /* TIM6 */ 
+    TIM6_IRQHandler,            /* TIM6 */
     TIM7_IRQHandler,            /* TIM7 */
-    DMA2_Channel1_IRQHandler,   /* DMA2 Channel 1 */ 
-    DMA2_Channel2_IRQHandler,   /* DMA2 Channel 2 */ 
-    DMA2_Channel3_IRQHandler,   /* DMA2 Channel 3 */ 
-    DMA2_Channel4_5_IRQHandler, /* DMA2 Channel 4 and Channel 5 */ 
-    0,0,0,0,0,0,0,0,            /* @0x130 */ 
-    0,0,0,0,0,0,0,0,            /* @0x150 */
-    0,0,0,0,0,0,0,0,            /* @0x170 */
-    0,0,0,0,0,0,0,0,            /* @0x190 */
-    0,0,0,0,0,0,0,0,            /* @0x1B0 */
-    0,0,0,0,                    /* @0x1D0 */
-    (void *)0xF1E0F85F          /* @0x1E0. This is for boot in RAM mode for 
+    DMA2_Channel1_IRQHandler,   /* DMA2 Channel 1 */
+    DMA2_Channel2_IRQHandler,   /* DMA2 Channel 2 */
+    DMA2_Channel3_IRQHandler,   /* DMA2 Channel 3 */
+    DMA2_Channel4_5_IRQHandler, /* DMA2 Channel 4 and Channel 5 */
+    0, 0, 0, 0, 0, 0, 0, 0,     /* @0x130 */
+    0, 0, 0, 0, 0, 0, 0, 0,     /* @0x150 */
+    0, 0, 0, 0, 0, 0, 0, 0,     /* @0x170 */
+    0, 0, 0, 0, 0, 0, 0, 0,     /* @0x190 */
+    0, 0, 0, 0, 0, 0, 0, 0,     /* @0x1B0 */
+    0, 0, 0, 0,                 /* @0x1D0 */
+    (void *)0xF1E0F85F          /* @0x1E0. This is for boot in RAM mode for
                                    STM32F10x High Density devices. */
 };
 
@@ -245,23 +243,22 @@ void (* const g_pfnVectors[])(void) =
  * @brief  This is the code that gets called when the processor first
  *          starts execution following a reset event. Only the absolutely
  *          necessary set is performed, after which the application
- *          supplied main() routine is called. 
+ *          supplied main() routine is called.
  * @param  None
  * @retval : None
 */
 
-void Reset_Handler(void)
-{
-/* FSMC Bank1 NOR/SRAM3 is used for the STM3210E-EVAL, if another Bank is 
-  required, then adjust the Register Addresses */
+void Reset_Handler(void) {
+  /* FSMC Bank1 NOR/SRAM3 is used for the STM3210E-EVAL, if another Bank is
+    required, then adjust the Register Addresses */
   SystemInit_ExtMemCtl();
 
   /* restore original stack pointer */
   asm(" LDR r0, =_estack");
   asm(" MSR msp, r0");
-  
+
   /* Initialize data and bss */
-   __Init_Data(); 
+  __Init_Data();
 
   /* Call the application's entry point.*/
   main();
@@ -273,28 +270,25 @@ void Reset_Handler(void)
  * @retval : None
 */
 
-void __Init_Data(void)
-{
+void __Init_Data(void) {
   unsigned long *pulSrc, *pulDest;
 
   /* Copy the data segment initializers from flash to SRAM */
   pulSrc = &_sidata;
 
-  for(pulDest = &_sdata; pulDest < &_edata; )
-  {
+  for (pulDest = &_sdata; pulDest < &_edata;) {
     *(pulDest++) = *(pulSrc++);
   }
   /* Zero fill the bss segment. */
-  for(pulDest = &_sbss; pulDest < &_ebss; )
-  {
+  for (pulDest = &_sbss; pulDest < &_ebss;) {
     *(pulDest++) = 0;
   }
 }
 
 /*******************************************************************************
 *
-* Provide weak aliases for each Exception handler to the Default_Handler. 
-* As they are weak aliases, any function with the same name will override 
+* Provide weak aliases for each Exception handler to the Default_Handler.
+* As they are weak aliases, any function with the same name will override
 * this definition.
 *
 *******************************************************************************/
@@ -369,30 +363,26 @@ void __Init_Data(void)
 #pragma weak SystemInit_ExtMemCtl = SystemInit_ExtMemCtl_Dummy
 
 /**
- * @brief  This is the code that gets called when the processor receives an 
+ * @brief  This is the code that gets called when the processor receives an
  *         unexpected interrupt.  This simply enters an infinite loop, preserving
  *         the system state for examination by a debugger.
  *
- * @param  None     
- * @retval : None       
+ * @param  None
+ * @retval : None
 */
 
-void Default_Handler(void) 
-{
+void Default_Handler(void) {
   /* Go into an infinite loop. */
-  while (1) 
-  {
+  while (1) {
   }
 }
 
 /**
- * @brief  Dummy SystemInit_ExtMemCtl function 
- * @param  None     
- * @retval : None       
+ * @brief  Dummy SystemInit_ExtMemCtl function
+ * @param  None
+ * @retval : None
 */
 
-void SystemInit_ExtMemCtl_Dummy(void) 
-{
-}
+void SystemInit_ExtMemCtl_Dummy(void) {}
 
 /******************* (C) COPYRIGHT 2009 STMicroelectronics *****END OF FILE****/

@@ -1,6 +1,7 @@
 /*
 * Author: Copyright (C) STMicroelectronics	 			Date:	04/27/2009
-*												 MCD Application Team			Version V3.0.1
+*												 MCD
+*Application Team			Version V3.0.1
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -25,17 +26,15 @@
 /* Includes ------------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
-#define MAL_OK   0
+#define MAL_OK 0
 #define MAL_FAIL 1
-#define MAX_LUN  1
+#define MAX_LUN 1
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-uint16_t MAL_Init (void);
-uint16_t MAL_GetStatus (void);
+uint16_t MAL_Init(void);
+uint16_t MAL_GetStatus(void);
 uint16_t MAL_Read(uint32_t Memory_Offset, uint32_t *Readbuff, uint16_t Transfer_Length);
 uint16_t MAL_Write(uint32_t Memory_Offset, uint32_t *Writebuff, uint16_t Transfer_Length);
 #endif /* __MASS_MAL_H */
-
-

@@ -1,6 +1,7 @@
 /*
-* Author: Copyright (C) STMicroelectronics	 			
-*												MCD Application Team			Date:	04/06/2009
+* Author: Copyright (C) STMicroelectronics
+*												MCD Application
+*Team			Date:	04/06/2009
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -25,14 +26,14 @@
   * @{
   */
 
-/** @defgroup RTC 
+/** @defgroup RTC
   * @brief RTC driver modules
   * @{
   */
 
 /** @defgroup RTC_Private_TypesDefinitions
   * @{
-  */ 
+  */
 /**
   * @}
   */
@@ -41,10 +42,10 @@
   * @{
   */
 
-#define CRL_CNF_Set      ((uint16_t)0x0010)      /* Configuration Flag Enable Mask */
-#define CRL_CNF_Reset    ((uint16_t)0xFFEF)      /* Configuration Flag Disable Mask */
-#define RTC_LSB_Mask     ((uint32_t)0x0000FFFF)  /* RTC LSB Mask */
-#define PRLH_MSB_Mask    ((uint32_t)0x000F0000)  /* RTC Prescaler MSB Mask */
+#define CRL_CNF_Set ((uint16_t)0x0010)       /* Configuration Flag Enable Mask */
+#define CRL_CNF_Reset ((uint16_t)0xFFEF)     /* Configuration Flag Disable Mask */
+#define RTC_LSB_Mask ((uint32_t)0x0000FFFF)  /* RTC LSB Mask */
+#define PRLH_MSB_Mask ((uint32_t)0x000F0000) /* RTC Prescaler MSB Mask */
 
 /**
   * @}
@@ -80,7 +81,7 @@
 
 /**
   * @brief  Enables or disables the specified RTC interrupts.
-  * @param RTC_IT: specifies the RTC interrupts sources to be enabled or 
+  * @param RTC_IT: specifies the RTC interrupts sources to be enabled or
   *                disabled.
   *   This parameter can be any combination of the following values:
   * @arg RTC_IT_OW: Overflow interrupt
@@ -90,18 +91,14 @@
   *   This parameter can be: ENABLE or DISABLE.
   * @retval : None
   */
-void RTC_ITConfig(uint16_t RTC_IT, FunctionalState NewState)
-{
+void RTC_ITConfig(uint16_t RTC_IT, FunctionalState NewState) {
   /* Check the parameters */
-  assert_param(IS_RTC_IT(RTC_IT));  
+  assert_param(IS_RTC_IT(RTC_IT));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  
-  if (NewState != DISABLE)
-  {
+
+  if (NewState != DISABLE) {
     RTC->CRH |= RTC_IT;
-  }
-  else
-  {
+  } else {
     RTC->CRH &= (uint16_t)~RTC_IT;
   }
 }
@@ -111,8 +108,7 @@ void RTC_ITConfig(uint16_t RTC_IT, FunctionalState NewState)
   * @param  None
   * @retval : None
   */
-void RTC_EnterConfigMode(void)
-{
+void RTC_EnterConfigMode(void) {
   /* Set the CNF flag to enter in the Configuration Mode */
   RTC->CRL |= CRL_CNF_Set;
 }
@@ -122,8 +118,7 @@ void RTC_EnterConfigMode(void)
   * @param  None
   * @retval : None
   */
-void RTC_ExitConfigMode(void)
-{
+void RTC_ExitConfigMode(void) {
   /* Reset the CNF flag to exit from the Configuration Mode */
   RTC->CRL &= CRL_CNF_Reset;
 }
@@ -133,11 +128,10 @@ void RTC_ExitConfigMode(void)
   * @param  None
   * @retval : RTC counter value.
   */
-uint32_t RTC_GetCounter(void)
-{
+uint32_t RTC_GetCounter(void) {
   uint16_t tmp = 0;
   tmp = RTC->CNTL;
-  return (((uint32_t)RTC->CNTH << 16 ) | tmp) ;
+  return (((uint32_t)RTC->CNTH << 16) | tmp);
 }
 
 /**
@@ -145,8 +139,7 @@ uint32_t RTC_GetCounter(void)
   * @param CounterValue: RTC counter new value.
   * @retval : None
   */
-void RTC_SetCounter(uint32_t CounterValue)
-{ 
+void RTC_SetCounter(uint32_t CounterValue) {
   RTC_EnterConfigMode();
   /* Set RTC COUNTER MSB word */
   RTC->CNTH = CounterValue >> 16;
@@ -160,11 +153,10 @@ void RTC_SetCounter(uint32_t CounterValue)
   * @param PrescalerValue: RTC prescaler new value.
   * @retval : None
   */
-void RTC_SetPrescaler(uint32_t PrescalerValue)
-{
+void RTC_SetPrescaler(uint32_t PrescalerValue) {
   /* Check the parameters */
   assert_param(IS_RTC_PRESCALER(PrescalerValue));
-  
+
   RTC_EnterConfigMode();
   /* Set RTC PRESCALER MSB word */
   RTC->PRLH = (PrescalerValue & PRLH_MSB_Mask) >> 16;
@@ -178,8 +170,7 @@ void RTC_SetPrescaler(uint32_t PrescalerValue)
   * @param AlarmValue: RTC alarm new value.
   * @retval : None
   */
-void RTC_SetAlarm(uint32_t AlarmValue)
-{  
+void RTC_SetAlarm(uint32_t AlarmValue) {
   RTC_EnterConfigMode();
   /* Set the ALARM MSB word */
   RTC->ALRH = AlarmValue >> 16;
@@ -193,8 +184,7 @@ void RTC_SetAlarm(uint32_t AlarmValue)
   * @param  None
   * @retval : RTC Divider value.
   */
-uint32_t RTC_GetDivider(void)
-{
+uint32_t RTC_GetDivider(void) {
   uint32_t tmp = 0x00;
   tmp = ((uint32_t)RTC->DIVH & (uint32_t)0x000F) << 16;
   tmp |= RTC->DIVL;
@@ -207,11 +197,9 @@ uint32_t RTC_GetDivider(void)
   * @param  None
   * @retval : None
   */
-void RTC_WaitForLastTask(void)
-{
+void RTC_WaitForLastTask(void) {
   /* Loop until RTOFF flag is set */
-  while ((RTC->CRL & RTC_FLAG_RTOFF) == (uint16_t)RESET)
-  {
+  while ((RTC->CRL & RTC_FLAG_RTOFF) == (uint16_t)RESET) {
   }
 }
 
@@ -223,13 +211,11 @@ void RTC_WaitForLastTask(void)
   * @param  None
   * @retval : None
   */
-void RTC_WaitForSynchro(void)
-{
+void RTC_WaitForSynchro(void) {
   /* Clear RSF flag */
   RTC->CRL &= (uint16_t)~RTC_FLAG_RSF;
   /* Loop until RSF flag is set */
-  while ((RTC->CRL & RTC_FLAG_RSF) == (uint16_t)RESET)
-  {
+  while ((RTC->CRL & RTC_FLAG_RSF) == (uint16_t)RESET) {
   }
 }
 
@@ -244,19 +230,15 @@ void RTC_WaitForSynchro(void)
   * @arg RTC_FLAG_SEC: Second flag
   * @retval : The new state of RTC_FLAG (SET or RESET).
   */
-FlagStatus RTC_GetFlagStatus(uint16_t RTC_FLAG)
-{
+FlagStatus RTC_GetFlagStatus(uint16_t RTC_FLAG) {
   FlagStatus bitstatus = RESET;
-  
+
   /* Check the parameters */
-  assert_param(IS_RTC_GET_FLAG(RTC_FLAG)); 
-  
-  if ((RTC->CRL & RTC_FLAG) != (uint16_t)RESET)
-  {
+  assert_param(IS_RTC_GET_FLAG(RTC_FLAG));
+
+  if ((RTC->CRL & RTC_FLAG) != (uint16_t)RESET) {
     bitstatus = SET;
-  }
-  else
-  {
+  } else {
     bitstatus = RESET;
   }
   return bitstatus;
@@ -273,11 +255,10 @@ FlagStatus RTC_GetFlagStatus(uint16_t RTC_FLAG)
   * @arg RTC_FLAG_SEC: Second flag
   * @retval : None
   */
-void RTC_ClearFlag(uint16_t RTC_FLAG)
-{
+void RTC_ClearFlag(uint16_t RTC_FLAG) {
   /* Check the parameters */
-  assert_param(IS_RTC_CLEAR_FLAG(RTC_FLAG)); 
-    
+  assert_param(IS_RTC_CLEAR_FLAG(RTC_FLAG));
+
   /* Clear the coressponding RTC flag */
   RTC->CRL &= (uint16_t)~RTC_FLAG;
 }
@@ -291,19 +272,15 @@ void RTC_ClearFlag(uint16_t RTC_FLAG)
   * @arg RTC_IT_SEC: Second interrupt
   * @retval : The new state of the RTC_IT (SET or RESET).
   */
-ITStatus RTC_GetITStatus(uint16_t RTC_IT)
-{
+ITStatus RTC_GetITStatus(uint16_t RTC_IT) {
   ITStatus bitstatus = RESET;
   /* Check the parameters */
-  assert_param(IS_RTC_GET_IT(RTC_IT)); 
-  
+  assert_param(IS_RTC_GET_IT(RTC_IT));
+
   bitstatus = (ITStatus)(RTC->CRL & RTC_IT);
-  if (((RTC->CRH & RTC_IT) != (uint16_t)RESET) && (bitstatus != (uint16_t)RESET))
-  {
+  if (((RTC->CRH & RTC_IT) != (uint16_t)RESET) && (bitstatus != (uint16_t)RESET)) {
     bitstatus = SET;
-  }
-  else
-  {
+  } else {
     bitstatus = RESET;
   }
   return bitstatus;
@@ -318,11 +295,10 @@ ITStatus RTC_GetITStatus(uint16_t RTC_IT)
   * @arg RTC_IT_SEC: Second interrupt
   * @retval : None
   */
-void RTC_ClearITPendingBit(uint16_t RTC_IT)
-{
+void RTC_ClearITPendingBit(uint16_t RTC_IT) {
   /* Check the parameters */
-  assert_param(IS_RTC_IT(RTC_IT));  
-  
+  assert_param(IS_RTC_IT(RTC_IT));
+
   /* Clear the coressponding RTC pending bit */
   RTC->CRL &= (uint16_t)~RTC_IT;
 }
@@ -338,5 +314,3 @@ void RTC_ClearITPendingBit(uint16_t RTC_IT)
 /**
   * @}
   */
-
-

@@ -1,7 +1,8 @@
 /*
 * Author: Copyright (C) Rudolf Boeddeker 					Date: 2010-01-13
-*												STMicroelectronics	 			
-*												MCD Application Team			Date:	06/13/2008
+*												STMicroelectronics
+*												MCD Application
+*Team			Date:	06/13/2008
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -26,14 +27,13 @@
 /* Private define ------------------------------------------------------------*/
 /* ---------------------- SysTick registers bit mask -------------------- */
 /* CTRL TICKINT Mask */
-#define CTRL_TICKINT_Set      ((u32)0x00000002)
-#define CTRL_TICKINT_Reset    ((u32)0xFFFFFFFD)
+#define CTRL_TICKINT_Set ((u32)0x00000002)
+#define CTRL_TICKINT_Reset ((u32)0xFFFFFFFD)
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-
 
 /*******************************************************************************
 * Function Name  : SysTick_SetReload
@@ -43,8 +43,7 @@
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void SysTick_SetReload(u32 Reload)
-{
+void SysTick_SetReload(u32 Reload) {
   /* Check the parameters */
   assert_param(IS_SYSTICK_RELOAD(Reload));
 
@@ -62,23 +61,18 @@ void SysTick_SetReload(u32 Reload)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void SysTick_CounterCmd(u32 SysTick_Counter)
-{
+void SysTick_CounterCmd(u32 SysTick_Counter) {
   /* Check the parameters */
   assert_param(IS_SYSTICK_COUNTER(SysTick_Counter));
 
-  if (SysTick_Counter == SysTick_Counter_Enable)
-  {
+  if (SysTick_Counter == SysTick_Counter_Enable) {
     SysTick->CTRL |= SysTick_Counter_Enable;
-  }
-  else if (SysTick_Counter == SysTick_Counter_Disable) 
-  {
+  } else if (SysTick_Counter == SysTick_Counter_Disable) {
     SysTick->CTRL &= SysTick_Counter_Disable;
-  }
-  else /* SysTick_Counter == SysTick_Counter_Clear */
+  } else /* SysTick_Counter == SysTick_Counter_Clear */
   {
     SysTick->VAL = SysTick_Counter_Clear;
-  }    
+  }
 }
 
 /*******************************************************************************
@@ -89,17 +83,13 @@ void SysTick_CounterCmd(u32 SysTick_Counter)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void SysTick_ITConfig(FunctionalState NewState)
-{
+void SysTick_ITConfig(FunctionalState NewState) {
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
-  {
+  if (NewState != DISABLE) {
     SysTick->CTRL |= CTRL_TICKINT_Set;
-  }
-  else
-  {
+  } else {
     SysTick->CTRL &= CTRL_TICKINT_Reset;
   }
 }
@@ -111,10 +101,7 @@ void SysTick_ITConfig(FunctionalState NewState)
 * Output         : None
 * Return         : SysTick current value
 *******************************************************************************/
-u32 SysTick_GetCounter(void)
-{
-  return(SysTick->VAL);
-}
+u32 SysTick_GetCounter(void) { return (SysTick->VAL); }
 
 /*******************************************************************************
 * Function Name  : SysTick_GetFlagStatus
@@ -127,9 +114,8 @@ u32 SysTick_GetCounter(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-FlagStatus SysTick_GetFlagStatus(u8 SysTick_FLAG)
-{
-  u32 statusreg = 0, tmp = 0 ;
+FlagStatus SysTick_GetFlagStatus(u8 SysTick_FLAG) {
+  u32 statusreg = 0, tmp = 0;
   FlagStatus bitstatus = RESET;
 
   /* Check the parameters */
@@ -141,20 +127,15 @@ FlagStatus SysTick_GetFlagStatus(u8 SysTick_FLAG)
   if (tmp == 2) /* The flag to check is in CTRL register */
   {
     statusreg = SysTick->CTRL;
-  }
-  else          /* The flag to check is in CALIB register */
+  } else /* The flag to check is in CALIB register */
   {
     statusreg = SysTick->CALIB;
   }
 
-  if ((statusreg & ((u32)1 << SysTick_FLAG)) != (u32)RESET)
-  {
+  if ((statusreg & ((u32)1 << SysTick_FLAG)) != (u32)RESET) {
     bitstatus = SET;
-  }
-  else
-  {
+  } else {
     bitstatus = RESET;
   }
   return bitstatus;
 }
-

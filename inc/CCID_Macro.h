@@ -1,7 +1,10 @@
 /*
-* Author: Copyright (C) Rudolf Boeddeker 													Date: 2010-01-13
-*												STMicroelectronics	 											Date:	02/20/2000
-*												 MICROCONTROLLER DIVISION / ST San Jose		Version V 0.9
+* Author: Copyright (C) Rudolf Boeddeker
+*Date: 2010-01-13
+*												STMicroelectronics
+*Date:	02/20/2000
+*												 MICROCONTROLLER
+*DIVISION / ST San Jose		Version V 0.9
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -19,20 +22,18 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef MACRO_H
 #define MACRO_H
 
 typedef unsigned int Word;
 typedef unsigned char Byte;
 
-#define MAKEWORD(msb, lsb)      ((Word)(((Word)((Byte)(msb))) << 8) | ((Byte)(lsb)))
-#define MAKELONG(msw, lsw)		((LWord)(((Word)(lsw)) | ((LWord)((Word)(msw))) << 16))
-#define LOWORD(l)				((Word)(l))
-#define HIWORD(l)				((Word)(((LWord)(l) >> 16) & 0xFFFF))
-#define LOBYTE(w)				((Byte)(w))
-#define HIBYTE(w)				((Byte)(((Word)(w) >> 8) & 0xFF))
-#define LOLONG(l)				((short)(l))
-
+#define MAKEWORD(msb, lsb) ((Word)(((Word)((Byte)(msb))) << 8) | ((Byte)(lsb)))
+#define MAKELONG(msw, lsw) ((LWord)(((Word)(lsw)) | ((LWord)((Word)(msw))) << 16))
+#define LOWORD(l) ((Word)(l))
+#define HIWORD(l) ((Word)(((LWord)(l) >> 16) & 0xFFFF))
+#define LOBYTE(w) ((Byte)(w))
+#define HIBYTE(w) ((Byte)(((Word)(w) >> 8) & 0xFF))
+#define LOLONG(l) ((short)(l))
 
 #endif

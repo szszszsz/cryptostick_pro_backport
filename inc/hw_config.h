@@ -1,6 +1,7 @@
 /*
 * Author: Copyright (C) STMicroelectronics	 			Date:	04/27/2009
-*												 MCD Application Team			Version V3.0.1
+*												 MCD
+*Application Team			Version V3.0.1
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -28,7 +29,7 @@
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported define -----------------------------------------------------------*/
-#define BULK_MAX_PACKET_SIZE  0x00000040
+#define BULK_MAX_PACKET_SIZE 0x00000040
 
 /* Exported functions ------------------------------------------------------- */
 void Set_System(void);
@@ -36,16 +37,16 @@ void Set_USBClock(void);
 void Enter_LowPowerMode(void);
 void Leave_LowPowerMode(void);
 void USB_Interrupts_Config(void);
-void USB_Cable_Config (FunctionalState NewState);
+void USB_Cable_Config(FunctionalState NewState);
 void USB_Disconnect_Config(void);
 void Get_SerialNum(void);
 void MAL_Config(void);
-char HexToAscii (uint8_t nHex);
-void SwitchSmartcardLED (FunctionalState NewState);
-void DisableFirmwareDownloadPort (void);
-void DisableSmartcardLED (void);
-void EnableSmartcardLED (void);
+char HexToAscii(uint8_t nHex);
+void SwitchSmartcardLED(FunctionalState NewState);
+void DisableFirmwareDownloadPort(void);
+void DisableSmartcardLED(void);
+void EnableSmartcardLED(void);
 
 /* External variables --------------------------------------------------------*/
 
-#endif  /*__HW_CONFIG_H*/
+#endif /*__HW_CONFIG_H*/

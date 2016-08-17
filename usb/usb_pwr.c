@@ -1,7 +1,8 @@
 /*
 * Author: Copyright (C) Rudolf Boeddeker 					Date: 2010-01-13
-*												STMicroelectronics	 			
-*												MCD Application Team			Date:	04/27/2009
+*												STMicroelectronics
+*												MCD Application
+*Team			Date:	04/27/2009
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -20,25 +21,23 @@
 */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f10x.h"
-#include "usb_lib.h"
-#include "usb_conf.h"
 #include "usb_pwr.h"
 #include "hw_config.h"
+#include "stm32f10x.h"
+#include "usb_conf.h"
+#include "usb_lib.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 __IO uint32_t bDeviceState = UNCONNECTED; /* USB device status */
-__IO bool fSuspendEnabled = TRUE;  /* true when suspend is possible */
+__IO bool fSuspendEnabled = TRUE;         /* true when suspend is possible */
 
-struct
-{
+struct {
   __IO RESUME_STATE eState;
   __IO uint8_t bESOFcnt;
-}
-ResumeS;
+} ResumeS;
 
 /* Extern variables ----------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -52,8 +51,7 @@ ResumeS;
 * Output         : None.
 * Return         : USB_SUCCESS.
 *******************************************************************************/
-RESULT PowerOn(void)
-{
+RESULT PowerOn(void) {
   uint16_t wRegVal;
 
   /*** cable plugged-in ? ***/
@@ -83,8 +81,7 @@ RESULT PowerOn(void)
 * Output         : None.
 * Return         : USB_SUCCESS.
 *******************************************************************************/
-RESULT PowerOff()
-{
+RESULT PowerOff() {
   /* disable all ints and force USB reset */
   _SetCNTR(CNTR_FRES);
   /* clear interrupt status register */
@@ -106,8 +103,7 @@ RESULT PowerOff()
 * Output         : None.
 * Return         : USB_SUCCESS.
 *******************************************************************************/
-void Suspend(void)
-{
+void Suspend(void) {
   uint16_t wCNTR;
   /* suspend preparation */
   /* ... */
@@ -121,7 +117,6 @@ void Suspend(void)
   /* power reduction */
   /* ... on connected devices */
 
-
   /* force low-power mode in the macrocell */
   wCNTR = _GetCNTR();
   wCNTR |= CNTR_LPMODE;
@@ -130,7 +125,6 @@ void Suspend(void)
   /* switch-off the clocks */
   /* ... */
   Enter_LowPowerMode();
-
 }
 
 /*******************************************************************************
@@ -140,8 +134,7 @@ void Suspend(void)
 * Output         : None.
 * Return         : USB_SUCCESS.
 *******************************************************************************/
-void Resume_Init(void)
-{
+void Resume_Init(void) {
   uint16_t wCNTR;
   /* ------------------ ONLY WITH BUS-POWERED DEVICES ---------------------- */
   /* restart the clocks */
@@ -161,7 +154,6 @@ void Resume_Init(void)
 
   /* reverse suspend preparation */
   /* ... */
-
 }
 
 /*******************************************************************************
@@ -176,54 +168,51 @@ void Resume_Init(void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void Resume(RESUME_STATE eResumeSetVal)
-{
+void Resume(RESUME_STATE eResumeSetVal) {
   uint16_t wCNTR;
 
   if (eResumeSetVal != RESUME_ESOF)
     ResumeS.eState = eResumeSetVal;
 
-  switch (ResumeS.eState)
-  {
-    case RESUME_EXTERNAL:
-      Resume_Init();
-      ResumeS.eState = RESUME_OFF;
-      break;
-    case RESUME_INTERNAL:
-      Resume_Init();
+  switch (ResumeS.eState) {
+  case RESUME_EXTERNAL:
+    Resume_Init();
+    ResumeS.eState = RESUME_OFF;
+    break;
+  case RESUME_INTERNAL:
+    Resume_Init();
+    ResumeS.eState = RESUME_START;
+    break;
+  case RESUME_LATER:
+    ResumeS.bESOFcnt = 2;
+    ResumeS.eState = RESUME_WAIT;
+    break;
+  case RESUME_WAIT:
+    ResumeS.bESOFcnt--;
+    if (ResumeS.bESOFcnt == 0)
       ResumeS.eState = RESUME_START;
-      break;
-    case RESUME_LATER:
-      ResumeS.bESOFcnt = 2;
-      ResumeS.eState = RESUME_WAIT;
-      break;
-    case RESUME_WAIT:
-      ResumeS.bESOFcnt--;
-      if (ResumeS.bESOFcnt == 0)
-        ResumeS.eState = RESUME_START;
-      break;
-    case RESUME_START:
+    break;
+  case RESUME_START:
+    wCNTR = _GetCNTR();
+    wCNTR |= CNTR_RESUME;
+    _SetCNTR(wCNTR);
+    ResumeS.eState = RESUME_ON;
+    ResumeS.bESOFcnt = 10;
+    break;
+  case RESUME_ON:
+    ResumeS.bESOFcnt--;
+    if (ResumeS.bESOFcnt == 0) {
       wCNTR = _GetCNTR();
-      wCNTR |= CNTR_RESUME;
+      wCNTR &= (~CNTR_RESUME);
       _SetCNTR(wCNTR);
-      ResumeS.eState = RESUME_ON;
-      ResumeS.bESOFcnt = 10;
-      break;
-    case RESUME_ON:
-      ResumeS.bESOFcnt--;
-      if (ResumeS.bESOFcnt == 0)
-      {
-        wCNTR = _GetCNTR();
-        wCNTR &= (~CNTR_RESUME);
-        _SetCNTR(wCNTR);
-        ResumeS.eState = RESUME_OFF;
-      }
-      break;
-    case RESUME_OFF:
-    case RESUME_ESOF:
-    default:
       ResumeS.eState = RESUME_OFF;
-      break;
+    }
+    break;
+  case RESUME_OFF:
+  case RESUME_ESOF:
+  default:
+    ResumeS.eState = RESUME_OFF;
+    break;
   }
 }
 
@@ -233,16 +222,13 @@ void Resume(RESUME_STATE eResumeSetVal)
 
 *******************************************************************************/
 
-void USB_Start (void) 
-{
-	Set_USBClock();
+void USB_Start(void) {
+  Set_USBClock();
 
   USB_Interrupts_Config();
-	
+
   USB_Init();
 
-  while (bDeviceState != CONFIGURED)
-	{
-	}
+  while (bDeviceState != CONFIGURED) {
+  }
 }
-

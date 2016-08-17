@@ -1,6 +1,7 @@
 /*
 * Author: Copyright (C) STMicroelectronics	 			Date:	04/27/2009
-*												 MCD Application Team			Version V3.0.1
+*												 MCD
+*Application Team			Version V3.0.1
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -26,13 +27,11 @@
 #include "stm32f10x.h"
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
-#define TXFR_IDLE     0
-#define TXFR_ONGOING  1
+#define TXFR_IDLE 0
+#define TXFR_ONGOING 1
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-void Write_Memory (uint32_t Memory_Offset, uint32_t Transfer_Length);
-void Read_Memory (uint32_t Memory_Offset, uint32_t Transfer_Length);
+void Write_Memory(uint32_t Memory_Offset, uint32_t Transfer_Length);
+void Read_Memory(uint32_t Memory_Offset, uint32_t Transfer_Length);
 #endif /* __memory_H */
-
-

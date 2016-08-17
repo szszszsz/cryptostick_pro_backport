@@ -1,6 +1,7 @@
 /*
-* Author: Copyright (C) STMicroelectronics	 			
-*												MCD Application Team			Date:	04/27/2009
+* Author: Copyright (C) STMicroelectronics
+*												MCD Application
+*Team			Date:	04/27/2009
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -24,13 +25,13 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x.h"
-#include "usb_type.h"
-#include "usb_regs.h"
-#include "usb_def.h"
 #include "usb_core.h"
+#include "usb_def.h"
 #include "usb_init.h"
-#include "usb_mem.h"
 #include "usb_int.h"
+#include "usb_mem.h"
+#include "usb_regs.h"
+#include "usb_type.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
@@ -39,4 +40,3 @@
 /* External variables --------------------------------------------------------*/
 
 #endif /* __USB_LIB_H */
-

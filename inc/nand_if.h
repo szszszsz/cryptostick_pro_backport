@@ -1,6 +1,7 @@
 /*
 * Author: Copyright (C) STMicroelectronics	 			Date:	04/27/2009
-*												 MCD Application Team			Version V3.0.1
+*												 MCD
+*Application Team			Version V3.0.1
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -26,47 +27,37 @@
 #include "stm32f10x.h"
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
-#define NAND_OK   0
+#define NAND_OK 0
 #define NAND_FAIL 1
 
-#define FREE_BLOCK  (1 << 12 )
-#define BAD_BLOCK   (1 << 13 )
-#define VALID_BLOCK (1 << 14 )
-#define USED_BLOCK  (1 << 15 )
+#define FREE_BLOCK (1 << 12)
+#define BAD_BLOCK (1 << 13)
+#define VALID_BLOCK (1 << 14)
+#define USED_BLOCK (1 << 15)
 
-#define MAX_PHY_BLOCKS_PER_ZONE  1024
-#define MAX_LOG_BLOCKS_PER_ZONE  1000
+#define MAX_PHY_BLOCKS_PER_ZONE 1024
+#define MAX_LOG_BLOCKS_PER_ZONE 1000
 /* Private Structures---------------------------------------------------------*/
 typedef struct __SPARE_AREA {
-	uint16_t LogicalIndex;
-	uint16_t DataStatus;
-	uint16_t BlockStatus;
-} SPARE_AREA;	
+  uint16_t LogicalIndex;
+  uint16_t DataStatus;
+  uint16_t BlockStatus;
+} SPARE_AREA;
 
-typedef enum {
-  WRITE_IDLE = 0,
-  POST_WRITE,
-  PRE_WRITE,
-  WRITE_CLEANUP,
-  WRITE_ONGOING  
-}WRITE_STATE;  
+typedef enum { WRITE_IDLE = 0, POST_WRITE, PRE_WRITE, WRITE_CLEANUP, WRITE_ONGOING } WRITE_STATE;
 
-typedef enum {
-  OLD_BLOCK = 0,
-  UNUSED_BLOCK
-}BLOCK_STATE; 
+typedef enum { OLD_BLOCK = 0, UNUSED_BLOCK } BLOCK_STATE;
 
 /* Private macro --------------------------------------------------------------*/
 //#define WEAR_LEVELLING_SUPPORT
-#define WEAR_DEPTH         10
-#define PAGE_TO_WRITE      (Transfer_Length/512)
+#define WEAR_DEPTH 10
+#define PAGE_TO_WRITE (Transfer_Length / 512)
 /* Private variables ----------------------------------------------------------*/
 /* Private function prototypes ------------------------------------------------*/
 /* exported functions ---------------------------------------------------------*/
-uint16_t NAND_Init (void);
-uint16_t NAND_Write (uint32_t Memory_Offset, uint32_t *Writebuff, uint16_t Transfer_Length);
-uint16_t NAND_Read  (uint32_t Memory_Offset, uint32_t *Readbuff, uint16_t Transfer_Length);
-uint16_t NAND_Format (void);
-SPARE_AREA ReadSpareArea (uint32_t address);
+uint16_t NAND_Init(void);
+uint16_t NAND_Write(uint32_t Memory_Offset, uint32_t *Writebuff, uint16_t Transfer_Length);
+uint16_t NAND_Read(uint32_t Memory_Offset, uint32_t *Readbuff, uint16_t Transfer_Length);
+uint16_t NAND_Format(void);
+SPARE_AREA ReadSpareArea(uint32_t address);
 #endif
-

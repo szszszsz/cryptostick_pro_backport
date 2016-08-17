@@ -1,7 +1,8 @@
 /*
 * Author: Copyright (C) Rudolf Boeddeker 					Date: 2010-01-13
-*												STMicroelectronics	 			
-*												MCD Application Team			Date:	04/27/2009
+*												STMicroelectronics
+*												MCD Application
+*Team			Date:	04/27/2009
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -20,12 +21,12 @@
 */
 
 /* Includes ------------------------------------------------------------------*/
-#include "usb_lib.h"
 #include "usb_bot.h"
 #include "usb_istr.h"
+#include "usb_lib.h"
 
-#include "platform_config.h"
 #include "CCID_usb.h"
+#include "platform_config.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -41,24 +42,21 @@
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void EP1_IN_Callback(void)
-{
-	switch (nGlobalStickState)
-	{
-		case STICK_STATE_RAMDISK	 :
-  																Mass_Storage_In();
-																	break;
-		case STICK_STATE_SD_DISK	 :
-  																Mass_Storage_In();
-																	break;
+void EP1_IN_Callback(void) {
+  switch (nGlobalStickState) {
+  case STICK_STATE_RAMDISK:
+    Mass_Storage_In();
+    break;
+  case STICK_STATE_SD_DISK:
+    Mass_Storage_In();
+    break;
 
-		case STICK_STATE_SMARTCARD :
-																	break;
+  case STICK_STATE_SMARTCARD:
+    break;
 
-		case STICK_STATE_COMPOSITE :	
-																	break;
-	}
-
+  case STICK_STATE_COMPOSITE:
+    break;
+  }
 }
 
 /*******************************************************************************
@@ -68,25 +66,23 @@ void EP1_IN_Callback(void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void EP2_OUT_Callback(void)
-{
-	switch (nGlobalStickState)
-	{
-		case STICK_STATE_RAMDISK	 :
-  																Mass_Storage_Out();
-																	break;
+void EP2_OUT_Callback(void) {
+  switch (nGlobalStickState) {
+  case STICK_STATE_RAMDISK:
+    Mass_Storage_Out();
+    break;
 
-		case STICK_STATE_SD_DISK	 :
-  																Mass_Storage_Out();
-																	break;
+  case STICK_STATE_SD_DISK:
+    Mass_Storage_Out();
+    break;
 
-		case STICK_STATE_SMARTCARD :
-																  CCID_BulkOutMessage ();																	
-																	break;
+  case STICK_STATE_SMARTCARD:
+    CCID_BulkOutMessage();
+    break;
 
-		case STICK_STATE_COMPOSITE :	
-																	break;
-	}
+  case STICK_STATE_COMPOSITE:
+    break;
+  }
 }
 
 /*******************************************************************************
@@ -96,22 +92,18 @@ void EP2_OUT_Callback(void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-void EP2_IN_Callback(void)
-{
-	switch (nGlobalStickState)
-	{
-		case STICK_STATE_RAMDISK	 :
-																	break;
+void EP2_IN_Callback(void) {
+  switch (nGlobalStickState) {
+  case STICK_STATE_RAMDISK:
+    break;
 
-		case STICK_STATE_SD_DISK	 :
-																	break;
+  case STICK_STATE_SD_DISK:
+    break;
 
-		case STICK_STATE_SMARTCARD :
-																	CCID_BulkInMessage();
-																	break;
-		case STICK_STATE_COMPOSITE :	
-																	break;
-	}
+  case STICK_STATE_SMARTCARD:
+    CCID_BulkInMessage();
+    break;
+  case STICK_STATE_COMPOSITE:
+    break;
+  }
 }
-
-

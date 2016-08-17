@@ -1,7 +1,9 @@
 /*
 * Author: Copyright (C) Rudolf Boeddeker 					Date: 2010-01-13
-*												STMicroelectronics	 			Date:	04/27/2009
-*												 MCD Application Team			Version V3.0.1
+*												STMicroelectronics
+*Date:	04/27/2009
+*												 MCD
+*Application Team			Version V3.0.1
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -31,14 +33,14 @@
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported define -----------------------------------------------------------*/
-#define RAMDISK_SIZ_DEVICE_DESC              18
-#define RAMDISK_SIZ_CONFIG_DESC              32
+#define RAMDISK_SIZ_DEVICE_DESC 18
+#define RAMDISK_SIZ_CONFIG_DESC 32
 
-#define RAMDISK_SIZ_STRING_LANGID            4
-#define RAMDISK_SIZ_STRING_VENDOR            38
-#define RAMDISK_SIZ_STRING_PRODUCT           38
-#define RAMDISK_SIZ_STRING_SERIAL            50
-#define RAMDISK_SIZ_STRING_INTERFACE         16
+#define RAMDISK_SIZ_STRING_LANGID 4
+#define RAMDISK_SIZ_STRING_VENDOR 38
+#define RAMDISK_SIZ_STRING_PRODUCT 38
+#define RAMDISK_SIZ_STRING_SERIAL 50
+#define RAMDISK_SIZ_STRING_INTERFACE 16
 
 /* Exported functions ------------------------------------------------------- */
 extern const uint8_t RAMDISK_DeviceDescriptor[RAMDISK_SIZ_DEVICE_DESC];
@@ -47,10 +49,7 @@ extern const uint8_t RAMDISK_ConfigDescriptor[RAMDISK_SIZ_CONFIG_DESC];
 extern const uint8_t RAMDISK_StringLangID[RAMDISK_SIZ_STRING_LANGID];
 extern const uint8_t RAMDISK_StringVendor[RAMDISK_SIZ_STRING_VENDOR];
 extern const uint8_t RAMDISK_StringProduct[RAMDISK_SIZ_STRING_PRODUCT];
-extern uint8_t       RAMDISK_StringSerial[RAMDISK_SIZ_STRING_SERIAL];
+extern uint8_t RAMDISK_StringSerial[RAMDISK_SIZ_STRING_SERIAL];
 extern const uint8_t RAMDISK_StringInterface[RAMDISK_SIZ_STRING_INTERFACE];
 
 #endif /* __USB_DESC_H */
-
-
-

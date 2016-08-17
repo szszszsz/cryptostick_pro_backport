@@ -1,7 +1,9 @@
 /*
 * Author: Copyright (C) Rudolf Boeddeker 					Date: 2010-01-13
-*												STMicroelectronics	 			Date:	04/27/2009
-*												 MCD Application Team			Version V3.0.1
+*												STMicroelectronics
+*Date:	04/27/2009
+*												 MCD
+*Application Team			Version V3.0.1
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -27,55 +29,52 @@
 /* EP_NUM */
 /* defines how many endpoints are used by the device */
 /*-------------------------------------------------------------*/
-#define CCID_EP_NUM                          (4)
+#define CCID_EP_NUM (4)
 
 /*-------------------------------------------------------------*/
 /* --------------   Buffer Description Table  -----------------*/
 /*-------------------------------------------------------------*/
 /* buffer table base address */
 
-#define BTABLE_ADDRESS      (0x00)
+#define BTABLE_ADDRESS (0x00)
 
 /* EP0  */
 /* rx/tx buffer base address */
-#define CCID_ENDP0_RXADDR        (0x18)
-#define CCID_ENDP0_TXADDR        (0x58)
+#define CCID_ENDP0_RXADDR (0x18)
+#define CCID_ENDP0_TXADDR (0x58)
 
 /* EP1  */
 /* tx buffer base address */
-#define CCID_ENDP1_TXADDR        (0x98)
+#define CCID_ENDP1_TXADDR (0x98)
 
 /* EP2  */
 /* Rx buffer base address */
-#define CCID_ENDP2_RXADDR        (0xD8)
+#define CCID_ENDP2_RXADDR (0xD8)
 /* Tx buffer base address */
-#define CCID_ENDP2_TXADDR        (0x118)
-
+#define CCID_ENDP2_TXADDR (0x118)
 
 /* ISTR events */
 /* IMR_MSK */
 /* mask defining which events has to be handled */
 /* by the device application software */
-#define IMR_MSK (CNTR_CTRM  | CNTR_RESETM)
+#define IMR_MSK (CNTR_CTRM | CNTR_RESETM)
 
 /* CTR service routines */
 /* associated to defined endpoints */
-#define  CCID_EP1_IN_Callback   NOP_Process
-#define  CCID_EP2_IN_Callback   NOP_Process
-#define  CCID_EP3_IN_Callback   NOP_Process
-#define  CCID_EP4_IN_Callback   NOP_Process
-#define  CCID_EP5_IN_Callback   NOP_Process
-#define  CCID_EP6_IN_Callback   NOP_Process
-#define  CCID_EP7_IN_Callback   NOP_Process
+#define CCID_EP1_IN_Callback NOP_Process
+#define CCID_EP2_IN_Callback NOP_Process
+#define CCID_EP3_IN_Callback NOP_Process
+#define CCID_EP4_IN_Callback NOP_Process
+#define CCID_EP5_IN_Callback NOP_Process
+#define CCID_EP6_IN_Callback NOP_Process
+#define CCID_EP7_IN_Callback NOP_Process
 
-
-#define  CCID_EP1_OUT_Callback   NOP_Process
+#define CCID_EP1_OUT_Callback NOP_Process
 //#define  CCID_EP2_OUT_Callback   NOP_Process
-#define  CCID_EP3_OUT_Callback   NOP_Process
-#define  CCID_EP4_OUT_Callback   NOP_Process
-#define  CCID_EP5_OUT_Callback   NOP_Process
-#define  CCID_EP6_OUT_Callback   NOP_Process
-#define  CCID_EP7_OUT_Callback   NOP_Process
+#define CCID_EP3_OUT_Callback NOP_Process
+#define CCID_EP4_OUT_Callback NOP_Process
+#define CCID_EP5_OUT_Callback NOP_Process
+#define CCID_EP6_OUT_Callback NOP_Process
+#define CCID_EP7_OUT_Callback NOP_Process
 
 #endif /* __CCID_USB_CONF_H */
-

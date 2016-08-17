@@ -1,6 +1,7 @@
 /*
 * Author: Copyright (C) STMicroelectronics	 			Date:	04/27/2009
-*												 MCD Application Team			Version V3.0.1
+*												 MCD
+*Application Team			Version V3.0.1
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -18,15 +19,13 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USB_PWR_H
 #define __USB_PWR_H
 /* Includes ------------------------------------------------------------------*/
 #include "usb_core.h"
 /* Exported types ------------------------------------------------------------*/
-typedef enum _RESUME_STATE
-{
+typedef enum _RESUME_STATE {
   RESUME_EXTERNAL,
   RESUME_INTERNAL,
   RESUME_LATER,
@@ -37,8 +36,7 @@ typedef enum _RESUME_STATE
   RESUME_ESOF
 } RESUME_STATE;
 
-typedef enum _DEVICE_STATE
-{
+typedef enum _DEVICE_STATE {
   UNCONNECTED,
   ATTACHED,
   POWERED,
@@ -55,12 +53,10 @@ void Resume_Init(void);
 void Resume(RESUME_STATE eResumeSetVal);
 RESULT PowerOn(void);
 RESULT PowerOff(void);
-void USB_Start (void);
+void USB_Start(void);
 
 /* External variables --------------------------------------------------------*/
-extern  __IO uint32_t bDeviceState; /* USB device status */
+extern __IO uint32_t bDeviceState; /* USB device status */
 extern __IO bool fSuspendEnabled;  /* true when suspend is possible */
 
-#endif  /*__USB_PWR_H*/
-
-
+#endif /*__USB_PWR_H*/

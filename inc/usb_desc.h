@@ -1,6 +1,7 @@
 /*
-* Author: Copyright (C) STMicroelectronics	 			
-*												MCD Application Team			Date:	04/27/2009
+* Author: Copyright (C) STMicroelectronics
+*												MCD Application
+*Team			Date:	04/27/2009
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -30,14 +31,14 @@
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported define -----------------------------------------------------------*/
-#define MASS_SIZ_DEVICE_DESC              18
-#define MASS_SIZ_CONFIG_DESC              32
+#define MASS_SIZ_DEVICE_DESC 18
+#define MASS_SIZ_CONFIG_DESC 32
 
-#define MASS_SIZ_STRING_LANGID            4
-#define MASS_SIZ_STRING_VENDOR            24
-#define MASS_SIZ_STRING_PRODUCT           54
-#define MASS_SIZ_STRING_SERIAL            50
-#define MASS_SIZ_STRING_INTERFACE         30
+#define MASS_SIZ_STRING_LANGID 4
+#define MASS_SIZ_STRING_VENDOR 24
+#define MASS_SIZ_STRING_PRODUCT 54
+#define MASS_SIZ_STRING_SERIAL 50
+#define MASS_SIZ_STRING_INTERFACE 30
 
 /* Exported functions ------------------------------------------------------- */
 extern const uint8_t MASS_DeviceDescriptor[MASS_SIZ_DEVICE_DESC];
@@ -46,11 +47,9 @@ extern const uint8_t MASS_ConfigDescriptor[MASS_SIZ_CONFIG_DESC];
 extern const uint8_t MASS_StringLangID[MASS_SIZ_STRING_LANGID];
 extern const uint8_t MASS_StringVendor[MASS_SIZ_STRING_VENDOR];
 extern const uint8_t MASS_StringProduct[MASS_SIZ_STRING_PRODUCT];
-extern uint8_t       MASS_StringSerial[MASS_SIZ_STRING_SERIAL];
+extern uint8_t MASS_StringSerial[MASS_SIZ_STRING_SERIAL];
 extern const uint8_t MASS_StringInterface[MASS_SIZ_STRING_INTERFACE];
 
 #endif /* __USB_DESC_H */
 
 /******************* (C) COPYRIGHT 2009 STMicroelectronics *****END OF FILE****/
-
-

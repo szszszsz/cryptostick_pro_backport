@@ -1,6 +1,7 @@
 /*
 * Author: Copyright (C) STMicroelectronics	 			Date:	04/27/2009
-*												 MCD Application Team			Version V3.0.1
+*												 MCD
+*Application Team			Version V3.0.1
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -81,4 +82,3 @@ void EP6_OUT_Callback(void);
 void EP7_OUT_Callback(void);
 
 #endif /*__USB_ISTR_H*/
-
