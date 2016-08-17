@@ -21,11 +21,12 @@
 */
 
 /* Includes ------------------------------------------------------------------*/
-#include "CCID_usb.h"
-#include "CCID_usb_conf.h"
-#include "CCID_usb_desc.h"
-#include "CCID_usb_prop.h"
+#include "CCIDHID_usb_prop.h"
+#include "CCIDHID_usb.h"
+#include "CCIDHID_usb_conf.h"
+#include "CCIDHID_usb_desc.h"
 #include "hw_config.h"
+#include "string.h"
 #include "usb_bot.h"
 #include "usb_lib.h"
 #include "usb_pwr.h"
@@ -209,9 +210,9 @@ void USB_CCID_Storage_ClearFeature(void) {
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-#ifdef NOT_USED
+
 void USB_CCID_Storage_SetDeviceAddress(void) { bDeviceState = ADDRESSED; }
-#endif
+
 /*******************************************************************************
 * Function Name  : CCID_Status_In
 * Description    : CCID Storage Status IN routine.

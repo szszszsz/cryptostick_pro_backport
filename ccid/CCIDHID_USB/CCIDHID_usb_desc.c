@@ -21,7 +21,7 @@
 */
 
 /* Includes ------------------------------------------------------------------*/
-#include "CCID_usb_desc.h"
+#include "CCIDHID_usb_desc.h"
 
 #define WBVAL(x) (x & 0xff), ((x >> 8) & 0xff)
 
