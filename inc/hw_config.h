@@ -30,6 +30,8 @@
 /* Exported macro ------------------------------------------------------------*/
 /* Exported define -----------------------------------------------------------*/
 #define BULK_MAX_PACKET_SIZE 0x00000040
+#define LED_ON_INTERVAL 2000
+#define LED_OFF_INTERVAL 500
 
 /* Exported functions ------------------------------------------------------- */
 void Set_System(void);
@@ -43,10 +45,17 @@ void Get_SerialNum(void);
 void MAL_Config(void);
 char HexToAscii(uint8_t nHex);
 void SwitchSmartcardLED(FunctionalState NewState);
+void SwitchOATHLED(FunctionalState NewState);
+void StartBlinkingOATHLED(uint8_t times);
 void DisableFirmwareDownloadPort(void);
 void DisableSmartcardLED(void);
 void EnableSmartcardLED(void);
 
+void EnableOATHLED(void);
 /* External variables --------------------------------------------------------*/
 
+extern uint64_t currentTime;
+extern uint64_t lastOATHBlinkTime;
+extern __IO uint32_t cardSerial;
+extern uint8_t blinkOATHLEDTimes;
 #endif /*__HW_CONFIG_H*/
