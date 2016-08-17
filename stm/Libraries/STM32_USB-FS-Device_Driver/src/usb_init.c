@@ -84,50 +84,17 @@ extern ONE_DESCRIPTOR CCID_String_Descriptor[5];
 void USB_SetDeviceConfiguration(int nGDC) {
   nGlobalStickState = nGDC;
 
-  switch (nGlobalStickState) {
-  case STICK_STATE_RAMDISK:
-    Device_Info = &RAMDISK_Device_Info;
-    Device_Property = &RAMDISK_Device_Property;
-    User_Standard_Requests = &RAMDISK_User_Standard_Requests;
-    Device_Descriptor = &RAMDISK_Device_Descriptor;
-    Config_Descriptor = &RAMDISK_Config_Descriptor;
-    String_Descriptor[0] = &RAMDISK_String_Descriptor[0];
-    String_Descriptor[1] = &RAMDISK_String_Descriptor[1];
-    String_Descriptor[2] = &RAMDISK_String_Descriptor[2];
-    String_Descriptor[3] = &RAMDISK_String_Descriptor[3];
-    String_Descriptor[4] = &RAMDISK_String_Descriptor[4];
-    break;
+  Device_Info = &CCID_Device_Info;
+  Device_Property = &CCID_Device_Property;
+  User_Standard_Requests = &CCID_User_Standard_Requests;
+  Device_Descriptor = &CCID_Device_Descriptor;
+  Config_Descriptor = &CCID_Config_Descriptor;
+  String_Descriptor[0] = &CCID_String_Descriptor[0];
+  String_Descriptor[1] = &CCID_String_Descriptor[1];
+  String_Descriptor[2] = &CCID_String_Descriptor[2];
+  String_Descriptor[3] = &CCID_String_Descriptor[3];
+  String_Descriptor[4] = &CCID_String_Descriptor[4];
 
-  case STICK_STATE_SD_DISK:
-    Device_Info = &MASS_Device_Info;
-    Device_Property = &MASS_Device_Property;
-    User_Standard_Requests = &MASS_User_Standard_Requests;
-    Device_Descriptor = &MASS_Device_Descriptor;
-    Config_Descriptor = &MASS_Config_Descriptor;
-    String_Descriptor[0] = &MASS_String_Descriptor[0];
-    String_Descriptor[1] = &MASS_String_Descriptor[1];
-    String_Descriptor[2] = &MASS_String_Descriptor[2];
-    String_Descriptor[3] = &MASS_String_Descriptor[3];
-    String_Descriptor[4] = &MASS_String_Descriptor[4];
-    break;
-
-  case STICK_STATE_SMARTCARD:
-    Device_Info = &CCID_Device_Info;
-    Device_Property = &CCID_Device_Property;
-    User_Standard_Requests = &CCID_User_Standard_Requests;
-    Device_Descriptor = &CCID_Device_Descriptor;
-    Config_Descriptor = &CCID_Config_Descriptor;
-    String_Descriptor[0] = &CCID_String_Descriptor[0];
-    String_Descriptor[1] = &CCID_String_Descriptor[1];
-    String_Descriptor[2] = &CCID_String_Descriptor[2];
-    String_Descriptor[3] = &CCID_String_Descriptor[3];
-    String_Descriptor[4] = &CCID_String_Descriptor[4];
-
-    break;
-
-  case STICK_STATE_COMPOSITE:
-    break;
-  }
 }
 
 /*******************************************************************************
