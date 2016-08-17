@@ -26,6 +26,7 @@
 #include "platform_config.h"
 #include "sdcard.h"
 #include "stm32f10x_it.h"
+#include "stm32f10x_systick.h"
 #include "usb_desc.h"
 #include "usb_pwr.h"
 
@@ -42,6 +43,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* Extern variables ----------------------------------------------------------*/
+uint8_t blinkOATHLEDTimes = 0;
+uint64_t lastOATHBlinkTime = 0;
 /* Private function prototypes -----------------------------------------------*/
 void RCC_Config(void);
 /* Private functions ---------------------------------------------------------*/
@@ -111,6 +114,31 @@ void EnableSmartcardLED(void) {
 
 /*******************************************************************************
 
+void EnableOATHLED(void) {
+  GPIO_InitTypeDef GPIO_InitStructure;
+  RCC_APB2PeriphClockCmd(OATH_LED_PERIPH, ENABLE);
+  GPIO_InitStructure.GPIO_Pin = OATH_LED_PIN;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(OATH_LED_PIN_PORT, &GPIO_InitStructure);
+}
+void EnableTimer2(void) {
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+  TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+  TIM_TimeBaseStructure.TIM_Period = 9;
+  TIM_TimeBaseStructure.TIM_Prescaler = 7200;
+  TIM_TimeBaseStructure.TIM_ClockDivision = 0x0;
+  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+  TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+  TIM_Cmd(TIM2, ENABLE);
+  TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
+  NVIC_InitTypeDef NVIC_InitStructure;
+  NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+}
         SwitchSmartcardLED
 
 *******************************************************************************/
@@ -118,11 +146,19 @@ void EnableSmartcardLED(void) {
 void SwitchSmartcardLED(FunctionalState NewState) {
 
   if (NewState == ENABLE) {
-    GPIO_SetBits(SMARTCARD_LED_PIN_PORT, SMARTCARD_LED_PIN);
-  } else {
     GPIO_ResetBits(SMARTCARD_LED_PIN_PORT, SMARTCARD_LED_PIN);
+  } else {
+    GPIO_SetBits(SMARTCARD_LED_PIN_PORT, SMARTCARD_LED_PIN);
   }
 }
+void SwitchOATHLED(FunctionalState NewState) {
+  if (NewState == ENABLE) {
+    GPIO_SetBits(OATH_LED_PIN_PORT, OATH_LED_PIN);
+  } else {
+    GPIO_ResetBits(OATH_LED_PIN_PORT, OATH_LED_PIN);
+  }
+}
+void StartBlinkingOATHLED(uint8_t times) { blinkOATHLEDTimes += times; }
 
 /*******************************************************************************
 * Function Name  : Set_System
@@ -144,23 +180,21 @@ void Set_System(void) {
   /* Disable smartcard LED*/
   //  DisableSmartcardLED ();
   EnableSmartcardLED();
-
+  EnableOATHLED();
   /* MAL configuration */
-  switch (nGlobalStickState) {
-  case STICK_STATE_RAMDISK:
-    break;
+  /* Enable CRC calculator */
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_CRC, ENABLE);
 
-  case STICK_STATE_SD_DISK:
-    MAL_Config();
-    break;
 
-  case STICK_STATE_SMARTCARD:
+  EnableTimer2();
+
+  /* Enable button */
+  EnableButton();
+
     CCID_Init(); // set CCID default values
-    break;
 
-  case STICK_STATE_COMPOSITE:
-    break;
-  }
+
+  SysTick_CounterCmd(SysTick_Counter_Enable);
 }
 
 /*******************************************************************************
