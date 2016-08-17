@@ -113,7 +113,7 @@ static void RCC_Configuration(void) {
     RCC_PCLK1Config(RCC_HCLK_Div2);
 
     /* PLLCLK = 8MHz * 9 = 72 MHz */
-    RCC_PLLConfig(RCC_PLLSource_HSE_Div1, RCC_PLLMul_9); // RB RCC_PLLMul_9);
+    RCC_PLLConfig(RCC_PLLSource_HSE_Div1, RCC_PLLMul_6); // RB
 
     /* Enable PLL */
     RCC_PLLCmd(ENABLE);
@@ -164,7 +164,7 @@ static void NVIC_Configuration(void) {
   NVIC_Init(&NVIC_InitStructure);
 
   /* Enable the USART3 Interrupt */
-  NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQChannel;
+  NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQChannel;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
   NVIC_Init(&NVIC_InitStructure);
 }
@@ -247,29 +247,18 @@ void Delay(u32 nCount) {
   TimingDelay = nCount;
 
   /* Enable the SysTick Counter */
-  SysTick_CounterCmd(SysTick_Counter_Enable);
+  // SysTick_CounterCmd(SysTick_Counter_Enable);
 
   while (TimingDelay != 0) {
-    switch (nGlobalStickState) {
-    case STICK_STATE_RAMDISK:
-      break;
-    case STICK_STATE_SD_DISK:
-      break;
-    case STICK_STATE_FLASHDISK:
-      break;
-    case STICK_STATE_SMARTCARD:
+
       CCID_CheckUsbCommunication();
-      break;
-    case STICK_STATE_COMPOSITE:
-      break;
-    }
   }
 
   /* Disable the SysTick Counter */
-  SysTick_CounterCmd(SysTick_Counter_Disable);
+  // SysTick_CounterCmd(SysTick_Counter_Disable);
 
   /* Clear the SysTick Counter */
-  SysTick_CounterCmd(SysTick_Counter_Clear);
+  // SysTick_CounterCmd(SysTick_Counter_Clear);
 }
 
 /*******************************************************************************
@@ -283,16 +272,16 @@ void Delay_noUSBCheck(u32 nCount) {
   TimingDelay = nCount;
 
   /* Enable the SysTick Counter */
-  SysTick_CounterCmd(SysTick_Counter_Enable);
+  // SysTick_CounterCmd(SysTick_Counter_Enable);
 
   while (TimingDelay != 0) {
   }
 
   /* Disable the SysTick Counter */
-  SysTick_CounterCmd(SysTick_Counter_Disable);
+  // SysTick_CounterCmd(SysTick_Counter_Disable);
 
   /* Clear the SysTick Counter */
-  SysTick_CounterCmd(SysTick_Counter_Clear);
+  // SysTick_CounterCmd(SysTick_Counter_Clear);
 }
 
 /*******************************************************************************
@@ -353,7 +342,7 @@ void SC_Handler(SC_State *SCState, SC_ADPU_Commands *SC_ADPU, SC_ADPU_Responce *
       if (SC_decode_Answer2reset(&SC_ATR_Table[0]) == T0_PROTOCOL) {
         (*SCState) = SC_ACTIVE_ON_T0;
       } else {
-        (*SCState) = SC_POWER_OFF;
+        // (*SCState) = SC_POWER_OFF;
         (*SCState) = SC_ACTIVE_ON_T0;
       }
     }
@@ -384,9 +373,9 @@ void SC_PowerCmd(FunctionalState NewState) {
   if (NewState != DISABLE) {
     GPIO_SetBits(SMARTCARD_POWER_PORT, SMARTCARD_POWER_PIN_1);
     GPIO_SetBits(SMARTCARD_POWER_PORT, SMARTCARD_POWER_PIN_2);
-    USART_SmartCardCmd(USART3, ENABLE);
+    USART_SmartCardCmd(USART1, ENABLE);
   } else {
-    USART_SmartCardCmd(USART3, DISABLE); // card is always on
+    USART_SmartCardCmd(USART1, DISABLE); // card is always on
     GPIO_ResetBits(SMARTCARD_POWER_PORT, SMARTCARD_POWER_PIN_1);
     GPIO_ResetBits(SMARTCARD_POWER_PORT, SMARTCARD_POWER_PIN_2);
   }
@@ -414,8 +403,8 @@ void SC_Reset(BitAction ResetState) { GPIO_WriteBit(GPIO_RESET, SC_RESET, ResetS
 * Return         : None
 *******************************************************************************/
 void SC_ParityErrorHandler(void) {
-  USART_SendData(USART3, SCData);
-  while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET) {
+  USART_SendData(USART1, SCData);
+  while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET) {
   }
 }
 
@@ -428,8 +417,8 @@ void SC_SetHwParams(u8 cBaudrateIndex, u8 cConversion, u8 Guardtime, u8 Waitingt
   /* Reconfigure the USART Baud Rate -------------------------------------------*/
   RCC_GetClocksFreq(&RCC_ClocksStatus);
 
-  apbclock = RCC_ClocksStatus.PCLK1_Frequency;
-  apbclock /= ((USART3->GTPR & (u16)0x00FF) * 2);
+  apbclock = RCC_ClocksStatus.PCLK2_Frequency;
+  apbclock /= ((USART1->GTPR & (u16)0x00FF) * 2);
 
   workingbaudrate = apbclock * D_Table[(cBaudrateIndex & (u8)0x0F)];
   workingbaudrate /= F_Table[((cBaudrateIndex >> 4) & (u8)0x0F)];
@@ -440,10 +429,10 @@ void SC_SetHwParams(u8 cBaudrateIndex, u8 cConversion, u8 Guardtime, u8 Waitingt
   USART_InitStructure.USART_Parity = USART_Parity_Even;
   USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
   USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-  USART_Init(USART3, &USART_InitStructure);
+  USART_Init(USART1, &USART_InitStructure);
 
   /* USART Guard Time set to 16 Bit */
-  USART_SetGuardTime(USART3, 12 + Guardtime);
+  USART_SetGuardTime(USART1, 12 + Guardtime);
 }
 
 /*******************************************************************************
@@ -463,11 +452,11 @@ void SC_PTSConfig(void) {
   /* Reconfigure the USART Baud Rate -------------------------------------------*/
   RCC_GetClocksFreq(&RCC_ClocksStatus);
 
-  apbclock = RCC_ClocksStatus.PCLK1_Frequency;
-  apbclock /= ((USART3->GTPR & (u16)0x00FF) * 2);
+  apbclock = RCC_ClocksStatus.PCLK2_Frequency;
+  apbclock /= ((USART1->GTPR & (u16)0x00FF) * 2);
   /* Enable the DMA Receive (Set DMAR bit only) to enable interrupt generation
            in case of a framing error FE */
-  USART_DMACmd(USART3, USART_DMAReq_Rx, ENABLE);
+  USART_DMACmd(USART1, USART_DMAReq_Rx, ENABLE);
 
   // SC_A2R.T0 = 0x11;	  // for slow serial testing
   // SC_A2R.T[0] = 0x11;
@@ -476,8 +465,8 @@ void SC_PTSConfig(void) {
     if (SC_A2R.T[0] != 0x11) {
       /* Send PTSS */
       SCData = 0xFF;
-      USART_SendData(USART3, SCData);
-      while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET) {
+      USART_SendData(USART1, SCData);
+      while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET) {
       }
 
       if ((USART_ByteReceive(&locData, SC_Receive_Timeout)) == SUCCESS) {
@@ -488,8 +477,8 @@ void SC_PTSConfig(void) {
 
       /* Send PTS0 */
       SCData = 0x11;
-      USART_SendData(USART3, SCData);
-      while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET) {
+      USART_SendData(USART1, SCData);
+      while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET) {
       }
 
       if ((USART_ByteReceive(&locData, SC_Receive_Timeout)) == SUCCESS) {
@@ -499,8 +488,8 @@ void SC_PTSConfig(void) {
       }
       /* Send PTS1 */
       SCData = SC_A2R.T[0]; // 0x13
-      USART_SendData(USART3, SCData);
-      while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET) {
+      USART_SendData(USART1, SCData);
+      while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET) {
       }
 
       if ((USART_ByteReceive(&locData, SC_Receive_Timeout)) == SUCCESS) {
@@ -512,8 +501,8 @@ void SC_PTSConfig(void) {
       /* Send PCK */
 
       SCData = (u8)0xFF ^ (u8)0x11 ^ (u8)SC_A2R.T[0];
-      USART_SendData(USART3, SCData);
-      while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET) {
+      USART_SendData(USART1, SCData);
+      while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET) {
       }
 
       if ((USART_ByteReceive(&locData, SC_Receive_Timeout)) == SUCCESS) {
@@ -558,7 +547,7 @@ void SC_PTSConfig(void) {
 
       // GET************* END
 
-      USART_DMACmd(USART3, USART_DMAReq_Rx, DISABLE);
+      USART_DMACmd(USART1, USART_DMAReq_Rx, DISABLE);
 
       /* PTS Confirm */
       if (PTSConfirmStatus == 0x01) {
@@ -569,7 +558,7 @@ void SC_PTSConfig(void) {
         USART_ClockInitStructure.USART_CPOL = USART_CPOL_Low;
         USART_ClockInitStructure.USART_CPHA = USART_CPHA_1Edge;
         USART_ClockInitStructure.USART_LastBit = USART_LastBit_Enable;
-        USART_ClockInit(USART3, &USART_ClockInitStructure);
+        USART_ClockInit(USART1, &USART_ClockInitStructure);
 
         USART_InitStructure.USART_BaudRate = workingbaudrate;
         USART_InitStructure.USART_WordLength = USART_WordLength_9b;
@@ -577,7 +566,7 @@ void SC_PTSConfig(void) {
         USART_InitStructure.USART_Parity = USART_Parity_Even;
         USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
         USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-        USART_Init(USART3, &USART_InitStructure);
+        USART_Init(USART1, &USART_InitStructure);
       }
     }
   }
@@ -609,9 +598,9 @@ static s16 SendDatabyte(vu8 uData) {
   s32 uRec;
   u32 Counter = 0;
 
-  USART_SendData(USART3, uData);
+  USART_SendData(USART1, uData);
 
-  while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET) {
+  while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET) {
     Counter++;
     if (10000L < Counter) {
       Counter++;
@@ -697,7 +686,7 @@ static void SC_SendData(SC_ADPU_Commands *SC_ADPU, SC_ADPU_Responce *SC_Responce
 
   /* Enable the DMA Receive (Set DMAR bit only) to enable interrupt generation
      in case of a framing error FE */
-  USART_DMACmd(USART3, USART_DMAReq_Rx, ENABLE);
+  USART_DMACmd(USART1, USART_DMAReq_Rx, ENABLE);
 
   /* Send header -------------------------------------------------------------*/
   SendDatabyte(SC_ADPU->Header.CLA);
@@ -713,7 +702,7 @@ static void SC_SendData(SC_ADPU_Commands *SC_ADPU, SC_ADPU_Responce *SC_Responce
   }
 
   /* Flush the USART3 DR */
-  (void)USART_ReceiveData(USART3);
+  (void)USART_ReceiveData(USART1);
 
   if (SC_GET_NO_STATUS != CheckForSCStatus(SC_ADPU, SC_ResponceStatus)) {
     return;
@@ -727,10 +716,10 @@ static void SC_SendData(SC_ADPU_Commands *SC_ADPU, SC_ADPU_Responce *SC_Responce
         SendDatabyte(SC_ADPU->Body.Data[i]);
       }
       /* Flush the USART3 DR */
-      (void)USART_ReceiveData(USART3);
+      (void)USART_ReceiveData(USART1);
 
       /* Disable the DMA Receive (Reset DMAR bit only) */
-      USART_DMACmd(USART3, USART_DMAReq_Rx, DISABLE);
+      USART_DMACmd(USART1, USART_DMAReq_Rx, DISABLE);
 
     }
 
@@ -917,21 +906,25 @@ void SC_Init(void) {
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_RESET, ENABLE);
 
   /* Enable USART3 clock */
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+  GPIO_PinRemapConfig(AFIO_MAPR_USART1_REMAP, ENABLE);
 
   /* Configure USART3 CK(PB.12) as alternate function push-pull */
 
   if (TRUE == nStartFlag) {
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOB, &GPIO_InitStructure);
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     /* Configure USART3 Tx (PB.10) as alternate function open-drain */
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
 
+    GPIO_PinRemapConfig(GPIO_Remap_SWJ_NoJTRST, ENABLE);
+    GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
     /* Configure Smartcard Reset  */
     GPIO_InitStructure.GPIO_Pin = SC_RESET;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
@@ -953,16 +946,16 @@ void SC_Init(void) {
   */
 
   /* USART Clock set to 3.6 MHz (PCLK1 (36 MHZ) / 10) */
-  USART_SetPrescaler(USART3, 0x05); // RB0x05
+  USART_SetPrescaler(USART1, 0x0a); // RB0x05
 
   /* USART Guard Time set to 16 Bit */
-  USART_SetGuardTime(USART3, 1); // RB 16
+  USART_SetGuardTime(USART1, 1); // RB 16
 
   USART_ClockInitStructure.USART_Clock = USART_Clock_Enable;
   USART_ClockInitStructure.USART_CPOL = USART_CPOL_Low;
   USART_ClockInitStructure.USART_CPHA = USART_CPHA_1Edge;
   USART_ClockInitStructure.USART_LastBit = USART_LastBit_Enable;
-  USART_ClockInit(USART3, &USART_ClockInitStructure);
+  USART_ClockInit(USART1, &USART_ClockInitStructure);
 
   USART_InitStructure.USART_BaudRate = 9677;
   USART_InitStructure.USART_WordLength = USART_WordLength_9b;
@@ -970,22 +963,22 @@ void SC_Init(void) {
   USART_InitStructure.USART_Parity = USART_Parity_Even;
   USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
   USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-  USART_Init(USART3, &USART_InitStructure);
+  USART_Init(USART1, &USART_InitStructure);
 
   /* Enable the USART3 Parity Error Interrupt */
-  USART_ITConfig(USART3, USART_IT_PE, ENABLE);
+  USART_ITConfig(USART1, USART_IT_PE, ENABLE);
 
   /* Enable the USART3 Framing Error Interrupt */
-  USART_ITConfig(USART3, USART_IT_ERR, ENABLE);
+  USART_ITConfig(USART1, USART_IT_ERR, ENABLE);
 
   /* Enable USART3 */
-  USART_Cmd(USART3, ENABLE);
+  USART_Cmd(USART1, ENABLE);
 
   /* Enable the NACK Transmission */
-  USART_SmartCardNACKCmd(USART3, ENABLE);
+  USART_SmartCardNACKCmd(USART1, ENABLE);
 
   /* Enable the Smartcard Interface */
-  USART_SmartCardCmd(USART3, ENABLE);
+  USART_SmartCardCmd(USART1, ENABLE);
 
   /* Set RSTIN HIGH */
   //  SC_Reset(Bit_SET);	org
@@ -1085,7 +1078,7 @@ static void SC_DeInit(void) {
   };
 
   /* Deinitializes the USART3 */
-  USART_DeInit(USART3);
+   USART_DeInit(USART1);
 
   /* Deinitializes the GPIO_RESET */
   //  GPIO_DeInit(GPIO_RESET);
@@ -1094,7 +1087,7 @@ static void SC_DeInit(void) {
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_RESET, DISABLE);
 
   /* Disable USART3 clock */
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, DISABLE);
+   RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, DISABLE);
   /*
   Delay (5);
   */
@@ -1146,12 +1139,12 @@ static void SC_DeInit(void) {
 static ErrorStatus USART_ByteReceive(u8 *Data, u32 TimeOut) {
   u32 Counter = 0;
 
-  while ((USART_GetFlagStatus(USART3, USART_FLAG_RXNE) == RESET) && (Counter != TimeOut)) {
+   while ((USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET) && (Counter != TimeOut)) {
     Counter++;
   }
 
   if (Counter != TimeOut) {
-    *Data = (u8)USART_ReceiveData(USART3);
+     *Data = (u8)USART_ReceiveData(USART1);
     return SUCCESS;
   } else {
     return ERROR;
@@ -1245,7 +1238,7 @@ int CRD_SendCommand(unsigned char *pTransmitBuffer, unsigned int nCommandSize,
   }
 
   /* Flush the USART3 DR */
-  (void)USART_ReceiveData(USART3);
+   (void)USART_ReceiveData(USART1);
 
   for (i = 0; i < ICC_MESSAGE_BUFFER_MAX_LENGTH - USB_MESSAGE_HEADER_SIZE; i++) {
     pTransmitBuffer[i] = 0xa5;
@@ -1342,7 +1335,7 @@ void initSCHardware(void) {
   GPIO_Configuration_Smartcard();
 
   /* Configure the EXTI Controller */
-  EXTI_Configuration();
+   // EXTI_Configuration();
 
   SmartcardOn();
 }
