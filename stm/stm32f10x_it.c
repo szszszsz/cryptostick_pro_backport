@@ -22,6 +22,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
+
+#include "hw_config.h"
+#include "platform_config.h"
 #include "sdcard.h"
 #include "usb_istr.h"
 #include "usb_lib.h"
@@ -31,6 +34,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 vu32 TimingDelay = 0;
+vu32 TimeCounter = 100;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -138,6 +142,12 @@ void SysTick_Handler(void) {
   if (TimingDelay != 0x00) {
     TimingDelay--;
   }
+  if (TimeCounter != 0x00) {
+    TimeCounter--;
+  } else {
+    TimeCounter = 100;
+    current_time++;
+  }
 }
 
 /******************************************************************************/
@@ -173,7 +183,7 @@ void USB_LP_CAN1_RX0_IRQHandler(void) { USB_Istr(); }
 *******************************************************************************/
 void SDIO_IRQHandler(void) {
   /* Process All SDIO Interrupt Sources */
-  SD_ProcessIRQSrc();
+  // SD_ProcessIRQSrc();
 }
 /******************************************************************************/
 /*                 STM32F10x Peripherals Interrupt Handlers                   */
@@ -190,5 +200,25 @@ void SDIO_IRQHandler(void) {
 * Return         : None
 *******************************************************************************/
 /*void PPP_IRQHandler(void)
-{
-}*/
+void TIM2_IRQHandler(void) {
+  if (TIM2->SR & TIM_SR_UIF) // if UIF flag is set
+  {
+    TIM2->SR &= ~TIM_SR_UIF; // clear UIF flag
+    currentTime++;
+    if (blinkOATHLEDTimes > 0) {
+      if (blinkOATHLEDTimes & 1) { // time to turn off the led
+        if (currentTime >= (lastOATHBlinkTime + LED_ON_INTERVAL)) {
+          SwitchOATHLED(DISABLE);
+          lastOATHBlinkTime = currentTime;
+          blinkOATHLEDTimes--;
+        }
+      } else {
+        if (currentTime >= (lastOATHBlinkTime + LED_OFF_INTERVAL)) {
+          SwitchOATHLED(ENABLE);
+          lastOATHBlinkTime = currentTime;
+          blinkOATHLEDTimes--;
+        }
+      }
+    }
+  }
+}
