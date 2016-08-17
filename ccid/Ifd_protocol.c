@@ -24,12 +24,12 @@
 
 #include "smartcard.h"
 
+#include "CCID_Crd.h"
 #include "CCID_Global.h"
 #include "CCID_Ifd_ccid.h"
 #include "CCID_Ifd_protocol.h"
 #include "CCID_Macro.h"
 #include "CCID_SlotErrorCode.h"
-#include "CCID_crd.h"
 
 const unsigned int FvsFI[] = {0, 372, 558, 744,  1116, 1488, 1860, 0,
                               0, 512, 768, 1024, 1536, 2048, 0,    0};
