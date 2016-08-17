@@ -20,6 +20,8 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "CCIDHID_usb_conf.h"
+#include "CCIDHID_usb_prop.h"
 #include "CCID_SlotErrorCode.h"
 #include "CCID_usb_conf.h"
 #include "CCID_usb_prop.h"
