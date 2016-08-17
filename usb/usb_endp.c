@@ -79,4 +79,3 @@ void EP4_IN_Callback(void) {
   PrevXferComplete = 1;
   // SwitchSmartcardLED(DISABLE);
 }
-}
