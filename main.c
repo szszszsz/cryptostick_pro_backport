@@ -20,6 +20,7 @@
 */
 
 #include "AccessInterface.h"
+#include "CCIDHID_usb_prop.h"
 #include "CCID_usb.h"
 #include "hw_config.h"
 #include "platform_config.h"
@@ -27,12 +28,14 @@
 #include "setjmp.h"
 #include "smartcard.h"
 #include "stm32f10x.h"
+#include "string.h"
 #include "usb_lib.h"
 #include "usb_pwr.h"
 
-int nGlobalStickState = STICK_STATE_SD_DISK;
+int nGlobalStickState = STICK_STATE_SMARTCARD;
 int nFlagSendSMCardInserted = TRUE;
 
+__IO uint8_t device_status = STATUS_READY;
 jmp_buf jmpRestartUSB; // reentrypoint for USB device change
 
 void Test1(void);
