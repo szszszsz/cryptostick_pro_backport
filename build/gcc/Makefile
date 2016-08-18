@@ -120,9 +120,6 @@ SRC = 		../../src/main.c                                         \
 			../../src/usb/usb_bot.c                                         \
 			../../src/usb/usb_pwr.c                                         \
 			../../src/usb/usb_istr.c                                         \
-			../../src/pwd-safe/FlashStorage.c	\
-			../../src/pwd-safe/HandleAesStorageKey.c	\
-			../../src/pwd-safe/password_safe.c	\
 
 			
 # List C source files here which must be compiled in ARM-Mode.
