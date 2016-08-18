@@ -112,7 +112,7 @@ void EnableSmartcardLED(void) {
   GPIO_Init(SMARTCARD_LED_PIN_PORT, &GPIO_InitStructure);
 }
 
-/*******************************************************************************
+/*******************************************************************************/
 
 void EnableOATHLED(void) {
   GPIO_InitTypeDef GPIO_InitStructure;
@@ -122,6 +122,20 @@ void EnableOATHLED(void) {
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(OATH_LED_PIN_PORT, &GPIO_InitStructure);
 }
+void EnableButton (void)
+{
+
+    GPIO_InitTypeDef GPIO_InitStructure;
+
+
+    RCC_APB2PeriphClockCmd (BUTTON_PERIPH, ENABLE);
+
+    GPIO_InitStructure.GPIO_Pin = BUTTON_PIN;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init (BUTTON_PIN_PORT, &GPIO_InitStructure);
+}
+
 void EnableTimer2(void) {
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
   TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
@@ -139,9 +153,6 @@ void EnableTimer2(void) {
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
 }
-        SwitchSmartcardLED
-
-*******************************************************************************/
 
 void SwitchSmartcardLED(FunctionalState NewState) {
 
@@ -386,8 +397,9 @@ void RCC_Config(void) {
 * Input          : None.
 * Return         : None.
 *******************************************************************************/
-void MAL_Config(void) {
-  MAL_Init();
+void MAL_Config (void)
+{
+    // MAL_Init();
 
 #ifdef USB_4BIT_SD_CARD_INTERFACE
   /* Enable the FSMC Clock */

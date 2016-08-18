@@ -36,6 +36,8 @@
 int nGlobalStickState = STICK_STATE_SMARTCARD;
 int nFlagSendSMCardInserted = TRUE;
 
+extern uint64_t currentTime = 0;
+
 #define STATUS_READY                      0x00
 __IO uint8_t device_status = STATUS_READY;
 
@@ -99,40 +101,18 @@ int main(void) {
 
   SysTick_Config(720000); // set systemtick to 10 ms - for delay ()
 
-  /* Setup befor USB startup */
-  switch (nGlobalStickState) {
-  case STICK_STATE_RAMDISK:
-    RamdiskInit();
-    break;
-  case STICK_STATE_SD_DISK:
-    break;
-  case STICK_STATE_SMARTCARD:
-    SmartCardInitInterface();
-    break;
-  case STICK_STATE_COMPOSITE:
-    break;
-  }
+  SmartCardInitInterface();
 
   USB_Start();
 
   /* Endless loop after USB startup  */
   while (1) {
-    switch (nGlobalStickState) {
-    case STICK_STATE_RAMDISK:
-      RamDiskUserInterface(); // comes not back
-      break;
-    case STICK_STATE_SD_DISK:
-      break;
-    case STICK_STATE_SMARTCARD:
       CCID_CheckUsbCommunication();
       if (TRUE == nFlagSendSMCardInserted) {
         CCID_SendCardDetect(); // Send card detect to host
         nFlagSendSMCardInserted = FALSE;
       }
       break;
-    case STICK_STATE_COMPOSITE:
-      break;
-    }
   }
 }
 
