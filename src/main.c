@@ -19,15 +19,16 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "stm32f10x.h"
+#include "usb_core.h"
 #include "AccessInterface.h"
-#include "CCIDHID_usb_prop.h"
+#include "CCID_usb_prop.h"
 #include "CCID_usb.h"
 #include "hw_config.h"
 #include "platform_config.h"
 #include "ramdisk.h"
 #include "setjmp.h"
 #include "smartcard.h"
-#include "stm32f10x.h"
 #include "string.h"
 #include "usb_lib.h"
 #include "usb_pwr.h"
@@ -35,7 +36,9 @@
 int nGlobalStickState = STICK_STATE_SMARTCARD;
 int nFlagSendSMCardInserted = TRUE;
 
+#define STATUS_READY                      0x00
 __IO uint8_t device_status = STATUS_READY;
+
 jmp_buf jmpRestartUSB; // reentrypoint for USB device change
 
 void Test1(void);
