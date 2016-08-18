@@ -123,7 +123,7 @@ void USB_CCID_init(void) {
 void USB_CCID_Reset(void) {
   /* Set the device as not configured */
   Device_Info->Current_Configuration = 0;
-
+    pInformation->Current_Interface = 0;    /* the default Interface */
   /* Current Feature initialization */
   pInformation->Current_Feature = CCID_ConfigDescriptor[7];
 
