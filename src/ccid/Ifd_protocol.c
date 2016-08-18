@@ -2,7 +2,7 @@
 * Author: Copyright (C) Rudolf Boeddeker
 *Date: 2010-01-13
 *												STMicroelectronics
-*/ ST Rousset	 			Date:	29-V-2001
+* ST Rousset	 			Date:	29-V-2001
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -64,7 +64,7 @@ static Param IccParameters;
 void IFD_Init(void) {
   SetChar_bmTransactionLevel;
   SetT0_bTransactionType;
-  XfrFlag = INS;
+  XfrFlag = INS_;
 
   IccParameters.FiDi = DEFAULT_FIDI;
   IccParameters.T01ConvChecksum = DEFAULT_T01CONVCHECKSUM;
@@ -254,7 +254,7 @@ unsigned char IFD_XfrCharT0(unsigned char *pBlockBuffer, unsigned int *pBlockSiz
   unsigned int i;
 
   switch (XfrFlag) {
-  case INS:
+  case INS_:
     if (*pBlockSize == 0) {
       return SLOTERROR_BAD_LENTGH;
     }
@@ -277,7 +277,7 @@ unsigned char IFD_XfrCharT0(unsigned char *pBlockBuffer, unsigned int *pBlockSiz
       *pBlockSize = AnswerSize;
     } else {
       *pBlockSize = XfrNbBytesLoaded;
-      XfrFlag = INS;
+      XfrFlag = INS_;
     }
     break;
   }

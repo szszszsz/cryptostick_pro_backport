@@ -2,7 +2,7 @@
 * Author: Copyright (C) Rudolf Boeddeker
 *Date: 2010-01-13
 *												STMicroelectronics
-*/ ST Rousset	 			Date:	22-V-2001
+* ST Rousset	 			Date:	22-V-2001
 *
 * This file is part of GPF Crypto Stick.
 *
@@ -22,7 +22,7 @@
 
 #include "CCID_Ifd_ccid.h"
 #include "CCID_SlotErrorCode.h"
-#include "CCID_crd.h"
+#include "CCID_Crd.h"
 #include "CCID_usb.h"
 #include "type.h"
 

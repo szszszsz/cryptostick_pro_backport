@@ -45,7 +45,7 @@
 #define bmTransactionLevel (IccTransactionLevelType & LEVEL_MASK)
 #define SetChar_bmTransactionLevel (IccTransactionLevelType &= (~LEVEL_MASK))
 
-#define INS 0x00
+#define INS_ 0x00
 #define DATA 0x01
 
 #define DEFAULT_FIDI 0x11

@@ -142,12 +142,6 @@ void SysTick_Handler(void) {
   if (TimingDelay != 0x00) {
     TimingDelay--;
   }
-  if (TimeCounter != 0x00) {
-    TimeCounter--;
-  } else {
-    TimeCounter = 100;
-    current_time++;
-  }
 }
 
 /******************************************************************************/
@@ -199,7 +193,7 @@ void SDIO_IRQHandler(void) {
 * Output         : None
 * Return         : None
 *******************************************************************************/
-/*void PPP_IRQHandler(void)
+//void PPP_IRQHandler(void)
 void TIM2_IRQHandler(void) {
   if (TIM2->SR & TIM_SR_UIF) // if UIF flag is set
   {

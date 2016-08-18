@@ -20,12 +20,14 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "CCIDHID_usb_conf.h"
-#include "CCIDHID_usb_prop.h"
+
+#include "stm32f10x.h"
+#include "usb_core.h"
+#include "CCID_usb_conf.h"
+#include "CCID_usb_prop.h"
 #include "CCID_SlotErrorCode.h"
 #include "hw_config.h"
 #include "mass_mal.h"
-#include "memory.h"
 #include "memory.h"
 #include "smartcard.h"
 #include "stm32f10x_usart.h"
@@ -54,8 +56,8 @@ extern uint32_t Mass_Block_Size[2];
 #include "CCID_Global.h"
 #include "CCID_Ifd_protocol.h"
 #include "CCID_Macro.h"
-#include "CCID_crd.h"
-#include "CCID_ifd_ccid.h"
+#include "CCID_Crd.h"
+#include "CCID_Ifd_ccid.h"
 #include "CCID_usb.h"
 
 // Defines for USB_vSetup structure

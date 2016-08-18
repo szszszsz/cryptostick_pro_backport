@@ -21,10 +21,12 @@
 */
 
 /* Includes ------------------------------------------------------------------*/
-#include "CCIDHID_usb_prop.h"
-#include "CCIDHID_usb.h"
-#include "CCIDHID_usb_conf.h"
-#include "CCIDHID_usb_desc.h"
+#include "stm32f10x.h"
+#include "usb_core.h"
+#include "CCID_usb_prop.h"
+#include "CCID_usb.h"
+#include "CCID_usb_conf.h"
+#include "CCID_usb_desc.h"
 #include "hw_config.h"
 #include "string.h"
 #include "usb_bot.h"
