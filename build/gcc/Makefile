@@ -116,11 +116,6 @@ SRC = 		../../src/main.c                                         \
 			../../src/stm/Libraries/STM32_USB-FS-Device_Driver/src/usb_mem.c                                         \
 			../../src/stm/Libraries/STM32_USB-FS-Device_Driver/src/usb_regs.c                                         \
 			../../src/crypt/aes/aes.c                                         \
-			../../src/crypt/sha1/sha1.c                                         \
-			../../src/crypt/sha1/hmac-sha1.c                                         \
-			../../src/hotp/hotp.c                                         \
-			../../src/keyboard/keyboard.c                                         \
-			../../src/keyboard/report_protocol.c                                         \
 			../../src/usb/usb_endp.c                                         \
 			../../src/usb/usb_bot.c                                         \
 			../../src/usb/usb_pwr.c                                         \
