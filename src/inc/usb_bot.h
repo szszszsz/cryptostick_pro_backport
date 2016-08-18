@@ -24,6 +24,10 @@
 #define __USB_BOT_H
 
 /* Includes ------------------------------------------------------------------*/
+#include "stm32f10x.h"
+#include "hw_config.h"
+#include "usb_core.h"
+
 /* Exported types ------------------------------------------------------------*/
 /* Bulk-only Command Block Wrapper */
 

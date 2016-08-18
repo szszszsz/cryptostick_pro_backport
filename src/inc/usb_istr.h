@@ -24,6 +24,8 @@
 #define __USB_ISTR_H
 
 /* Includes ------------------------------------------------------------------*/
+#include "stm32f10x.h"
+#include "usb_core.h"
 #include "usb_conf.h"
 
 /* Exported types ------------------------------------------------------------*/

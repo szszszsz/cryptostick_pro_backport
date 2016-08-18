@@ -21,6 +21,9 @@
 */
 
 /* Includes ------------------------------------------------------------------*/
+#include "stm32f10x.h"
+#include "hw_config.h"
+#include "usb_core.h"
 #include "usb_bot.h"
 #include "usb_istr.h"
 #include "usb_lib.h"

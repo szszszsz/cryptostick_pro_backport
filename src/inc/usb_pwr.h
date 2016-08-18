@@ -23,7 +23,10 @@
 #ifndef __USB_PWR_H
 #define __USB_PWR_H
 /* Includes ------------------------------------------------------------------*/
+#include "stm32f10x.h"
+#include "hw_config.h"
 #include "usb_core.h"
+
 /* Exported types ------------------------------------------------------------*/
 typedef enum _RESUME_STATE {
   RESUME_EXTERNAL,
