@@ -24,7 +24,7 @@
 #include "stm32f10x.h"
 #include "usb_core.h"
 #include "CCID_usb_prop.h"
-#include "CCID_usb.h"
+//#include "CCID_usb.h"
 #include "CCID_usb_conf.h"
 #include "CCID_usb_desc.h"
 #include "hw_config.h"
@@ -213,7 +213,7 @@ void USB_CCID_Storage_ClearFeature(void) {
 * Return         : None.
 *******************************************************************************/
 
-void USB_CCID_Storage_SetDeviceAddress(void) { bDeviceState = ADDRESSED; }
+//void USB_CCID_Storage_SetDeviceAddress(void) { bDeviceState = ADDRESSED; }
 
 /*******************************************************************************
 * Function Name  : CCID_Status_In
